@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "node --watch index.js",
     "start": "node index.js",
+    "build": "node --check index.js",
     "render-build": "npm install",
     "seed": "node src/scripts/seed.js",
     "createadmin": "node createadmin.js",

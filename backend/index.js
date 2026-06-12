@@ -1,11 +1,11 @@
-import app from "./app.js";
-import { env } from "./config/env.js";
-import { db, usingPostgres } from "./db/index.js";
+import app from "./src/app.js";
+import { env } from "./src/config/env.js";
+import { db, usingPostgres } from "./src/db/index.js";
 
 await db.ready?.();
 
 const server = app.listen(env.port, () => {
-  console.log(`Moorland House & SPA API running on http://127.0.0.1:${env.port}`);
+  console.log(`Moorland House & SPA API running on port ${env.port}`);
   console.log(`Storage: ${usingPostgres ? "Postgres" : "JSON file preview"}`);
 });
 

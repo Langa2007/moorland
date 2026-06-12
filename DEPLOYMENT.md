@@ -16,6 +16,8 @@ Start command:
 npm start
 ```
 
+The backend entry file is `backend/index.js`, so you do not need to point Render at anything inside `src`.
+
 Seed database:
 
 ```bash

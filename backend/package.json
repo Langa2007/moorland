@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "dev": "node --watch src/server.js",
-    "start": "node src/server.js",
+    "dev": "node --watch index.js",
+    "start": "node index.js",
+    "render-build": "npm install",
     "seed": "node src/scripts/seed.js",
     "createadmin": "node createadmin.js",
     "sync-db": "node sync-db.js",
-    "check": "node --check src/server.js"
+    "check": "node --check index.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

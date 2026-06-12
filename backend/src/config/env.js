@@ -7,6 +7,10 @@ export const env = {
   nodeEnv: process.env.NODE_ENV || "development",
   frontendUrl: process.env.FRONTEND_URL || "http://127.0.0.1:3000",
   adminUrl: process.env.ADMIN_URL || "http://127.0.0.1:3001",
+  corsOrigins: (process.env.CORS_ORIGINS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
   databaseUrl: process.env.DATABASE_URL || "",
   databaseSsl: process.env.DATABASE_SSL === "true",
   jwtSecret: process.env.JWT_SECRET || "change-this-long-secret-before-production",

@@ -13,8 +13,8 @@ export default function Header() {
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-pool/30 bg-charcoal text-ivory shadow-[0_14px_44px_rgba(24,32,39,0.22)]">
       <div className="luxury-container flex min-h-[74px] items-center justify-between gap-4">
         <Link href="/" className="group flex items-center gap-3" aria-label="Moorland House & SPA home">
-          <span className="grid h-11 w-11 place-items-center rounded-full border border-pool/50 bg-cream text-sm font-black text-charcoal">
-            MH
+          <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-full border border-pool/50 bg-cream">
+            <img src="/logo.png" alt="" className="h-full w-full object-cover" />
           </span>
           <span className="leading-tight">
             <span className="block font-serif text-lg font-bold">Moorland</span>

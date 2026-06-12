@@ -7,11 +7,12 @@
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
     "seed": "node src/scripts/seed.js",
+    "createadmin": "node createadmin.js",
     "check": "node --check src/server.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
-    "cloudinary": "^2.8.0",
+    "cloudinary": "^2.10.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",

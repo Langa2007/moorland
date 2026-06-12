@@ -267,8 +267,13 @@ export default function AdminApp() {
     return (
       <main className="grid min-h-dvh place-items-center bg-cream p-5">
         <form className="w-full max-w-md rounded-lg bg-ivory p-6 shadow-soft" onSubmit={handleLogin}>
-          <p className="text-sm font-black uppercase text-pool">Moorland Admin</p>
-          <h1 className="mt-2 font-serif text-4xl font-bold">Sign in</h1>
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="" className="h-14 w-14 rounded-full border border-pool/50 object-cover" />
+            <div>
+              <p className="text-sm font-black uppercase text-pool">Moorland Admin</p>
+              <h1 className="font-serif text-4xl font-bold">Sign in</h1>
+            </div>
+          </div>
           <label className="mt-6 grid gap-2 text-sm font-bold text-mist">
             Email
             <input className="field" type="email" name="email" required />
@@ -291,9 +296,12 @@ export default function AdminApp() {
     <main className="min-h-dvh lg:grid lg:grid-cols-[280px_1fr]">
       <aside className="border-r border-line bg-charcoal p-4 text-ivory lg:min-h-dvh">
         <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="text-xs font-black uppercase text-pool">Moorland</p>
-            <h1 className="font-serif text-2xl font-bold">Admin</h1>
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="" className="h-12 w-12 rounded-full border border-pool/50 bg-cream object-cover" />
+            <div>
+              <p className="text-xs font-black uppercase text-pool">Moorland</p>
+              <h1 className="font-serif text-2xl font-bold">Admin</h1>
+            </div>
           </div>
           <button className="btn btn-ghost border-white/20 bg-white/10 text-ivory lg:hidden" onClick={refreshAll} type="button">
             <RefreshCw className="h-4 w-4" />

@@ -35,6 +35,9 @@ let schemaReady;
 function getDatabaseUrl() {
   if (env.databaseUrl) return env.databaseUrl;
   const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
+  if (env.nodeEnv === "production" && ["localhost", "127.0.0.1", "::1"].includes(DB_HOST)) {
+    return "";
+  }
   if (!DB_HOST || !DB_USER || !DB_NAME) return "";
   const password = DB_PASSWORD ? `:${encodeURIComponent(DB_PASSWORD)}` : "";
   return `postgres://${encodeURIComponent(DB_USER)}${password}@${DB_HOST}:${DB_PORT || 5432}/${DB_NAME}`;

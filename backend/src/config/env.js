@@ -2,6 +2,16 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const databaseUrl =
+  process.env.DATABASE_URL ||
+  process.env.NEON_DATABASE_URL ||
+  process.env.NEON_DB_URL ||
+  process.env.NEON_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.POSTGRES_PRISMA_URL ||
+  process.env.POSTGRES_URL_NON_POOLING ||
+  "";
+
 export const env = {
   port: Number(process.env.PORT || 5000),
   nodeEnv: process.env.NODE_ENV || "development",
@@ -11,8 +21,11 @@ export const env = {
     .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean),
-  databaseUrl: process.env.DATABASE_URL || "",
-  databaseSsl: process.env.DATABASE_SSL === "true",
+  databaseUrl,
+  databaseSsl:
+    process.env.DATABASE_SSL === "true" ||
+    process.env.TARGET_DATABASE_SSL === "true" ||
+    /neon\.tech|neon\.database/i.test(databaseUrl),
   jwtSecret: process.env.JWT_SECRET || "change-this-long-secret-before-production",
   adminEmail: process.env.ADMIN_EMAIL || "admin@moorlandhouse-spa.com",
   adminPassword: process.env.ADMIN_PASSWORD || "ChangeMe123!",

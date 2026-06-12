@@ -28,6 +28,12 @@ Create or reset the admin user:
 npm run createadmin
 ```
 
+Sync your local Postgres data into Neon:
+
+```bash
+npm run sync-db
+```
+
 Required Render environment variables:
 
 ```env

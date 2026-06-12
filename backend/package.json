@@ -8,6 +8,7 @@
     "start": "node src/server.js",
     "seed": "node src/scripts/seed.js",
     "createadmin": "node createadmin.js",
+    "sync-db": "node sync-db.js",
     "check": "node --check src/server.js"
   },
   "dependencies": {

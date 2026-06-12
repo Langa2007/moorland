@@ -1,13 +1,15 @@
 import ContactForm from "@/components/ContactForm";
 import SectionHeading from "@/components/SectionHeading";
-import { contact } from "@/lib/data";
+import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "Contact & Location",
   description: "Contact Moorland House & SPA by phone, WhatsApp, email, directions, or inquiry form."
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const { contact } = await getSiteData();
+
   return (
     <main className="pt-24">
       <section className="section-pad bg-cream">

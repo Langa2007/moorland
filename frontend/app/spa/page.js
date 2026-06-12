@@ -1,13 +1,15 @@
 import BookingPanel from "@/components/BookingPanel";
 import SectionHeading from "@/components/SectionHeading";
-import { images, spaServices } from "@/lib/data";
+import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "SPA & Wellness",
   description: "Luxury SPA treatments with booking calendar preview and availability messaging."
 };
 
-export default function SpaPage() {
+export default async function SpaPage() {
+  const { images, spaServices } = await getSiteData();
+
   return (
     <main className="pt-24">
       <section className="section-pad bg-charcoal text-ivory">

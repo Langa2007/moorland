@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { gallery } from "@/lib/data";
 
-export default function GalleryGrid() {
+export default function GalleryGrid({ items = gallery }) {
   const [filter, setFilter] = useState("All");
   const [active, setActive] = useState(null);
-  const filters = ["All", ...new Set(gallery.map((item) => item.category))];
-  const visible = filter === "All" ? gallery : gallery.filter((item) => item.category === filter);
+  const filters = ["All", ...new Set(items.map((item) => item.category))];
+  const visible = filter === "All" ? items : items.filter((item) => item.category === filter);
 
   return (
     <>

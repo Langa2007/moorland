@@ -5,9 +5,11 @@ import GalleryGrid from "@/components/GalleryGrid";
 import Newsletter from "@/components/Newsletter";
 import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
-import { contact, experiences, images, menuItems, rooms, spaServices } from "@/lib/data";
+import { getSiteData } from "@/lib/data";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { contact, experiences, images, menuItems, rooms, spaServices, gallery, testimonials } = await getSiteData();
+
   return (
     <main>
       <section className="hero-image relative grid place-items-end overflow-hidden bg-charcoal text-ivory">
@@ -148,7 +150,7 @@ export default function HomePage() {
         <div className="luxury-container">
           <SectionHeading eyebrow="Guest Trust" title="Opening soon with a clear preview of the experience." align="center" />
           <div className="mt-10">
-            <Testimonials />
+            <Testimonials items={testimonials} />
           </div>
         </div>
       </section>
@@ -157,7 +159,7 @@ export default function HomePage() {
         <div className="luxury-container">
           <SectionHeading eyebrow="Gallery Teaser" title="A cinematic gallery ready for authentic client photos." />
           <div className="mt-10">
-            <GalleryGrid />
+            <GalleryGrid items={gallery} />
           </div>
         </div>
       </section>

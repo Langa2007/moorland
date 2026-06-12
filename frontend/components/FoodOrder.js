@@ -3,11 +3,11 @@
 import { useMemo, useState } from "react";
 import { menuItems } from "@/lib/data";
 
-export default function FoodOrder() {
+export default function FoodOrder({ items = menuItems }) {
   const [cart, setCart] = useState([]);
   const [category, setCategory] = useState("All");
-  const categories = ["All", ...new Set(menuItems.map((item) => item.category))];
-  const visible = category === "All" ? menuItems : menuItems.filter((item) => item.category === category);
+  const categories = ["All", ...new Set(items.map((item) => item.category))];
+  const visible = category === "All" ? items : items.filter((item) => item.category === category);
   const total = useMemo(() => cart.reduce((sum, item) => sum + item.price, 0), [cart]);
 
   return (

@@ -1,14 +1,16 @@
 import BookingPanel from "@/components/BookingPanel";
 import FoodOrder from "@/components/FoodOrder";
 import SectionHeading from "@/components/SectionHeading";
-import { gallery, images } from "@/lib/data";
+import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "The Lounge",
   description: "African and international cuisine, reservations, ambience gallery, and online ordering preview."
 };
 
-export default function LoungePage() {
+export default async function LoungePage() {
+  const { gallery, images, menuItems } = await getSiteData();
+
   return (
     <main className="pt-24">
       <section className="section-pad bg-cream">
@@ -27,7 +29,7 @@ export default function LoungePage() {
         <div className="luxury-container">
           <SectionHeading eyebrow="Food & Drink" title="Order preview with Kenyan-friendly payment messaging." />
           <div className="mt-10">
-            <FoodOrder />
+            <FoodOrder items={menuItems} />
           </div>
         </div>
       </section>

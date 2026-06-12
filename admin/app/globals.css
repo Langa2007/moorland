@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5f0e8;
+  color: #182027;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.field {
+  min-height: 44px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(74, 91, 106, 0.22);
+  background: #fffdf8;
+  padding: 10px 12px;
+  color: #182027;
+  outline: none;
+}
+
+.field:focus {
+  border-color: #45b8ac;
+  box-shadow: 0 0 0 4px rgba(69, 184, 172, 0.18);
+}
+
+.btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 800;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.btn-primary {
+  background: #182027;
+  color: #fffdf8;
+}
+
+.btn-accent {
+  background: #45b8ac;
+  color: #082422;
+}
+
+.btn-danger {
+  background: #9f2f2f;
+  color: #fffdf8;
+}
+
+.btn-ghost {
+  border: 1px solid rgba(74, 91, 106, 0.24);
+  background: #fffdf8;
+  color: #182027;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}

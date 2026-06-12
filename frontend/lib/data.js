@@ -215,3 +215,100 @@ export const blogPosts = [
     tag: "Cuisine"
   }
 ];
+
+function money(value) {
+  return `KSh ${Number(value || 0).toLocaleString()}`;
+}
+
+export function normalizeSiteData(site = {}) {
+  const meta = site.meta || contact;
+  const slots = meta.imageSlots || {};
+  const siteImages = {
+    ...images,
+    hero: slots.hero || images.hero,
+    pool: slots.pool || images.pool,
+    spa: slots.spa || images.spa,
+    lounge: slots.lounge || images.lounge,
+    suite: slots.suite || images.suite,
+    garden: slots.garden || images.garden
+  };
+
+  const normalizedMenuItems = (site.menuItems?.length ? site.menuItems : menuItems).map((item) => ({
+    id: item.id,
+    category: item.category,
+    name: item.name,
+    desc: item.description || item.desc,
+    price: item.price,
+    tags: item.tags || [],
+    image: item.featuredImage || item.image
+  }));
+
+  const normalizedSpaServices = (site.spaServices?.length ? site.spaServices : spaServices).map((service) => ({
+    id: service.id,
+    name: service.name,
+    duration: service.duration || `${service.durationMinutes} min`,
+    price: typeof service.price === "number" ? money(service.price) : service.price,
+    desc: service.description || service.desc,
+    image: service.featuredImage || service.image
+  }));
+
+  const normalizedRooms = (site.rooms?.length ? site.rooms : rooms).map((room) => ({
+    id: room.id,
+    name: room.name,
+    rate: room.rateLabel || room.rate,
+    desc: room.description || room.desc,
+    amenities: room.amenities || [],
+    image: room.featuredImage || room.image || room.gallery?.[0]
+  }));
+
+  return {
+    contact: {
+      ...contact,
+      ...meta,
+      phoneLink: `tel:${(meta.phone || contact.phone).replace(/\s/g, "")}`
+    },
+    images: siteImages,
+    experiences: [
+      {
+        title: "Elegant Lounge",
+        text: "African classics, international plates, signature cocktails, and relaxed evening ambience.",
+        image: siteImages.lounge,
+        href: "/lounge"
+      },
+      {
+        title: "SPA & Wellness",
+        text: "Massage, facials, body rituals, couples treatments, and calm recovery spaces.",
+        image: siteImages.spa,
+        href: "/spa"
+      },
+      {
+        title: "Boutique Rooms",
+        text: "Presidential, Executive, and Superior suites with a private, restorative atmosphere.",
+        image: siteImages.suite,
+        href: "/accommodations"
+      }
+    ],
+    menuItems: normalizedMenuItems,
+    spaServices: normalizedSpaServices,
+    rooms: normalizedRooms,
+    gallery: (site.gallery?.length ? site.gallery : gallery).map((item) => ({
+      category: item.category,
+      title: item.title,
+      image: item.image
+    })),
+    testimonials: site.testimonials?.length ? site.testimonials : testimonials,
+    blogPosts: site.blogPosts?.length ? site.blogPosts : blogPosts
+  };
+}
+
+export async function getSiteData() {
+  const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000/api";
+  try {
+    const response = await fetch(`${apiBase}/site`, { next: { revalidate: 60 } });
+    if (!response.ok) throw new Error("Site API unavailable");
+    const payload = await response.json();
+    return normalizeSiteData(payload.data);
+  } catch (_error) {
+    return normalizeSiteData();
+  }
+}

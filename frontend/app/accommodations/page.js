@@ -1,13 +1,15 @@
 import BookingPanel from "@/components/BookingPanel";
 import SectionHeading from "@/components/SectionHeading";
-import { rooms } from "@/lib/data";
+import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "Luxury Accommodations",
   description: "Presidential Suite, Executive Suite, and Superior Suite booking preview."
 };
 
-export default function AccommodationsPage() {
+export default async function AccommodationsPage() {
+  const { rooms } = await getSiteData();
+
   return (
     <main className="pt-24">
       <section className="section-pad bg-cream">

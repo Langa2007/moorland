@@ -1,12 +1,14 @@
 import SectionHeading from "@/components/SectionHeading";
-import { images } from "@/lib/data";
+import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "About Us",
   description: "The story, team philosophy, and location details for Moorland House & SPA."
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { images } = await getSiteData();
+
   return (
     <main className="pt-24">
       <section className="section-pad bg-cream">

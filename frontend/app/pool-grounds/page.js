@@ -1,12 +1,14 @@
 import SectionHeading from "@/components/SectionHeading";
-import { gallery, images } from "@/lib/data";
+import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "Pool & Grounds",
   description: "Turquoise pool, wooden decks, lush gardens, and panoramic setting."
 };
 
-export default function PoolGroundsPage() {
+export default async function PoolGroundsPage() {
+  const { gallery, images } = await getSiteData();
+
   return (
     <main className="pt-24">
       <section className="section-pad bg-ivory">

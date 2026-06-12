@@ -1,12 +1,14 @@
 import SectionHeading from "@/components/SectionHeading";
-import { blogPosts } from "@/lib/data";
+import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "Blog & Wellness",
   description: "SEO-ready blog and wellness foundation for Moorland House & SPA."
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const { blogPosts } = await getSiteData();
+
   return (
     <main className="pt-24">
       <section className="section-pad bg-cream">

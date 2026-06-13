@@ -34,6 +34,12 @@ export const images = {
   dessert: "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=1200&q=85"
 };
 
+function imageUrl(value, fallback = "/logo.png") {
+  if (!value || typeof value !== "string") return fallback;
+  if (value.includes("images.unsplash.com")) return fallback;
+  return value;
+}
+
 export const experiences = [
   {
     title: "Elegant Lounge",
@@ -225,12 +231,12 @@ export function normalizeSiteData(site = {}) {
   const slots = meta.imageSlots || {};
   const siteImages = {
     ...images,
-    hero: slots.hero || images.hero,
-    pool: slots.pool || images.pool,
-    spa: slots.spa || images.spa,
-    lounge: slots.lounge || images.lounge,
-    suite: slots.suite || images.suite,
-    garden: slots.garden || images.garden
+    hero: imageUrl(slots.hero || images.hero),
+    pool: imageUrl(slots.pool || images.pool),
+    spa: imageUrl(slots.spa || images.spa),
+    lounge: imageUrl(slots.lounge || images.lounge),
+    suite: imageUrl(slots.suite || images.suite),
+    garden: imageUrl(slots.garden || images.garden)
   };
 
   const normalizedMenuItems = (site.menuItems?.length ? site.menuItems : menuItems).map((item) => ({
@@ -240,7 +246,7 @@ export function normalizeSiteData(site = {}) {
     desc: item.description || item.desc,
     price: item.price,
     tags: item.tags || [],
-    image: item.featuredImage || item.image
+    image: imageUrl(item.featuredImage || item.image)
   }));
 
   const normalizedSpaServices = (site.spaServices?.length ? site.spaServices : spaServices).map((service) => ({
@@ -249,7 +255,7 @@ export function normalizeSiteData(site = {}) {
     duration: service.duration || `${service.durationMinutes} min`,
     price: typeof service.price === "number" ? money(service.price) : service.price,
     desc: service.description || service.desc,
-    image: service.featuredImage || service.image
+    image: imageUrl(service.featuredImage || service.image)
   }));
 
   const normalizedRooms = (site.rooms?.length ? site.rooms : rooms).map((room) => ({
@@ -258,7 +264,7 @@ export function normalizeSiteData(site = {}) {
     rate: room.rateLabel || room.rate,
     desc: room.description || room.desc,
     amenities: room.amenities || [],
-    image: room.featuredImage || room.image || room.gallery?.[0]
+    image: imageUrl(room.featuredImage || room.image || room.gallery?.[0])
   }));
 
   return {
@@ -294,7 +300,7 @@ export function normalizeSiteData(site = {}) {
     gallery: (site.gallery?.length ? site.gallery : gallery).map((item) => ({
       category: item.category,
       title: item.title,
-      image: item.image
+      image: imageUrl(item.image)
     })),
     testimonials: site.testimonials?.length ? site.testimonials : testimonials,
     blogPosts: site.blogPosts?.length ? site.blogPosts : blogPosts

@@ -13,22 +13,33 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const uploadsDir = path.resolve(__dirname, "../../uploads");
 
-const allowedMimeTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]);
+const blockedMimeTypes = new Set(["image/svg+xml"]);
+const extensionByMimeType = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "image/avif": ".avif",
+  "image/gif": ".gif",
+  "image/bmp": ".bmp",
+  "image/tiff": ".tiff",
+  "image/heic": ".heic",
+  "image/heif": ".heif"
+};
 
 const storage = multer.diskStorage({
   destination: (_req, _file, callback) => callback(null, uploadsDir),
   filename: (_req, file, callback) => {
-    const ext = path.extname(file.originalname).toLowerCase() || ".jpg";
+    const ext = path.extname(file.originalname).toLowerCase() || extensionByMimeType[file.mimetype] || ".jpg";
     callback(null, `${Date.now()}-${createId("img")}${ext}`);
   }
 });
 
 const upload = multer({
   storage,
-  limits: { fileSize: 8 * 1024 * 1024 },
+  limits: { fileSize: 15 * 1024 * 1024 },
   fileFilter: (_req, file, callback) => {
-    if (!allowedMimeTypes.has(file.mimetype)) {
-      return callback(new AppError("Only JPEG, PNG, WebP, and AVIF images are allowed", 422));
+    if (!file.mimetype?.startsWith("image/") || blockedMimeTypes.has(file.mimetype)) {
+      return callback(new AppError("Upload a valid picture file: JPG, JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF, HEIC, or HEIF.", 422));
     }
     return callback(null, true);
   }

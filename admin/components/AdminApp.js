@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BedDouble,
   CalendarDays,
@@ -137,13 +137,36 @@ const emptyRecords = {
 };
 
 const imageSlotLabels = [
-  ["hero", "Home hero"],
-  ["pool", "Pool & grounds"],
-  ["spa", "SPA hero"],
-  ["lounge", "Lounge hero"],
-  ["suite", "Suite cards"],
-  ["garden", "Garden/exterior"]
+  ["hero", "Home hero", "Homepage first screen and opening blog image"],
+  ["pool", "Pool & grounds", "Homepage pool band and Pool & Grounds hero"],
+  ["spa", "SPA hero", "SPA page hero and wellness blog image"],
+  ["lounge", "Lounge hero", "Lounge page hero and lounge experience card"],
+  ["suite", "Suite cards", "Homepage experience cards and executive suite fallback"],
+  ["garden", "Garden/exterior", "About page and exterior gallery fallback"]
 ];
+
+const acceptedImageTypes = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".webp",
+  ".avif",
+  ".gif",
+  ".bmp",
+  ".tif",
+  ".tiff",
+  ".heic",
+  ".heif",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/avif",
+  "image/gif",
+  "image/bmp",
+  "image/tiff",
+  "image/heic",
+  "image/heif"
+].join(",");
 
 function toTitle(value) {
   return value.replace(/([A-Z])/g, " $1").replace(/^./, (letter) => letter.toUpperCase());
@@ -350,7 +373,15 @@ export default function AdminApp() {
 
         {status && <p className="mb-5 rounded-lg bg-red-100 p-3 text-sm font-bold text-red-800">{status}</p>}
         {view === "dashboard" && <Dashboard dashboard={dashboard} />}
-        {view === "meta" && meta && <MetaEditor meta={meta} api={api} onSave={saveMeta} />}
+        {view === "meta" && meta && (
+          <MetaEditor
+            meta={meta}
+            api={api}
+            uploads={transactions.uploads || []}
+            onSave={saveMeta}
+            onRefresh={refreshAll}
+          />
+        )}
         {view === "content" && (
           <ContentEditor
             collection={collection}
@@ -396,7 +427,7 @@ function Dashboard({ dashboard }) {
   );
 }
 
-function MetaEditor({ meta, api, onSave }) {
+function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
   const [draft, setDraft] = useState(meta);
   useEffect(() => setDraft(meta), [meta]);
 
@@ -421,11 +452,15 @@ function MetaEditor({ meta, api, onSave }) {
     >
       <section className="rounded-lg bg-ivory p-5 shadow-soft">
         <h3 className="font-serif text-2xl font-bold">Global image slots</h3>
+        <p className="mt-2 text-sm leading-6 text-mist">
+          These slots feed the fixed image positions on the public website. Upload or paste a Cloudinary URL, then save settings.
+        </p>
         <div className="mt-5 grid gap-5 md:grid-cols-2">
-          {imageSlotLabels.map(([key, label]) => (
+          {imageSlotLabels.map(([key, label, hint]) => (
             <ImageField
               key={key}
               label={label}
+              hint={hint}
               value={draft.imageSlots?.[key] || ""}
               onChange={(value) => updateSlot(key, value)}
               api={api}
@@ -433,6 +468,15 @@ function MetaEditor({ meta, api, onSave }) {
           ))}
         </div>
       </section>
+
+      <MediaLibrary
+        uploads={uploads}
+        onUse={(slot, url) => updateSlot(slot, url)}
+        onDelete={async (id) => {
+          await api.remove(`/admin/uploads/${id}`);
+          await onRefresh?.();
+        }}
+      />
 
       <section className="rounded-lg bg-ivory p-5 shadow-soft">
         <h3 className="font-serif text-2xl font-bold">Contact and SEO</h3>
@@ -455,6 +499,51 @@ function MetaEditor({ meta, api, onSave }) {
         Save site settings
       </button>
     </form>
+  );
+}
+
+function MediaLibrary({ uploads, onUse, onDelete }) {
+  const [copied, setCopied] = useState("");
+
+  return (
+    <section className="rounded-lg bg-ivory p-5 shadow-soft">
+      <h3 className="font-serif text-2xl font-bold">Uploaded media</h3>
+      <p className="mt-2 text-sm leading-6 text-mist">
+        Use uploaded images for the global slots, copy the URL for content records, or delete old uploads.
+      </p>
+      <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {uploads.length === 0 ? (
+          <p className="text-sm text-mist">No uploaded images yet. Upload from any image field above or in a content record.</p>
+        ) : uploads.map((upload) => (
+          <article key={upload.id} className="rounded-lg border border-line bg-cream/50 p-3">
+            <img src={upload.url} alt="" className="h-40 w-full rounded-lg object-cover" />
+            <p className="mt-2 truncate text-xs font-bold text-mist">{upload.originalName || upload.url}</p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {imageSlotLabels.map(([slot, label]) => (
+                <button key={slot} className="btn btn-ghost min-h-10 px-2 text-xs" type="button" onClick={() => onUse(slot, upload.url)}>
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 flex gap-2">
+              <button
+                className="btn btn-ghost flex-1"
+                type="button"
+                onClick={async () => {
+                  await navigator.clipboard?.writeText(upload.url);
+                  setCopied(upload.id);
+                }}
+              >
+                {copied === upload.id ? "Copied" : "Copy URL"}
+              </button>
+              <button className="btn btn-danger" type="button" onClick={() => onDelete(upload.id)}>
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -545,11 +634,13 @@ function Field({ name, type, value, onChange, api }) {
 
   if (type === "image-list") {
     return (
-      <label className="grid gap-2 text-sm font-bold text-mist">
-        {toTitle(name)}
-        <textarea className="field min-h-28" value={toFormValue(type, value)} onChange={(event) => onChange(fromFormValue(type, event.target.value))} />
+      <div className="grid gap-2 text-sm font-bold text-mist">
+        <label className="grid gap-2">
+          {toTitle(name)}
+          <textarea className="field min-h-28" value={toFormValue(type, value)} onChange={(event) => onChange(fromFormValue(type, event.target.value))} />
+        </label>
         <ImageField label="Upload and append" value="" onChange={(url) => onChange([...(value || []), url])} api={api} compact />
-      </label>
+      </div>
     );
   }
 
@@ -583,16 +674,21 @@ function Field({ name, type, value, onChange, api }) {
   );
 }
 
-function ImageField({ label, value, onChange, api, compact = false }) {
+function ImageField({ label, value, onChange, api, compact = false, hint = "" }) {
+  const inputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
 
   async function upload(event) {
     const file = event.target.files?.[0];
     if (!file) return;
     setUploading(true);
+    setError("");
     try {
       const image = await api.upload(file);
       onChange(image.url);
+    } catch (uploadError) {
+      setError(uploadError.message || "Image upload failed.");
     } finally {
       setUploading(false);
       event.target.value = "";
@@ -600,16 +696,30 @@ function ImageField({ label, value, onChange, api, compact = false }) {
   }
 
   return (
-    <label className="grid gap-2 text-sm font-bold text-mist">
-      {label}
+    <div className="grid gap-2 text-sm font-bold text-mist">
+      <span>{label}</span>
+      {hint ? <p className="text-xs font-medium leading-5 text-mist/80">{hint}</p> : null}
       {!compact && value ? <img src={value} alt="" className="h-36 w-full rounded-lg object-cover" /> : null}
       {!compact && <input className="field" value={value || ""} onChange={(event) => onChange(event.target.value)} placeholder="https://res.cloudinary.com/..." />}
-      <span className="btn btn-ghost cursor-pointer">
+      <button
+        className="btn btn-ghost"
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+      >
         {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
-        Upload image
-        <input className="sr-only" type="file" accept="image/*" onChange={upload} />
-      </span>
-    </label>
+        {uploading ? "Uploading..." : compact ? "Upload and append" : "Upload image"}
+      </button>
+      <input
+        ref={inputRef}
+        className="sr-only"
+        type="file"
+        accept={acceptedImageTypes}
+        onChange={upload}
+      />
+      <p className="text-xs font-medium text-mist/70">Accepted: JPG, JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF, HEIC, HEIF.</p>
+      {error ? <p className="rounded-lg bg-red-100 p-2 text-xs font-bold text-red-800">{error}</p> : null}
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import {
   BedDouble,
   CalendarDays,
@@ -675,7 +675,7 @@ function Field({ name, type, value, onChange, api }) {
 }
 
 function ImageField({ label, value, onChange, api, compact = false, hint = "" }) {
-  const inputRef = useRef(null);
+  const inputId = useId();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
@@ -701,20 +701,19 @@ function ImageField({ label, value, onChange, api, compact = false, hint = "" })
       {hint ? <p className="text-xs font-medium leading-5 text-mist/80">{hint}</p> : null}
       {!compact && value ? <img src={value} alt="" className="h-36 w-full rounded-lg object-cover" /> : null}
       {!compact && <input className="field" value={value || ""} onChange={(event) => onChange(event.target.value)} placeholder="https://res.cloudinary.com/..." />}
-      <button
-        className="btn btn-ghost"
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        disabled={uploading}
+      <label
+        className={`btn btn-ghost cursor-pointer ${uploading ? "pointer-events-none opacity-60" : ""}`}
+        htmlFor={inputId}
       >
         {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
         {uploading ? "Uploading..." : compact ? "Upload and append" : "Upload image"}
-      </button>
+      </label>
       <input
-        ref={inputRef}
+        id={inputId}
         className="sr-only"
         type="file"
         accept={acceptedImageTypes}
+        disabled={uploading}
         onChange={upload}
       />
       <p className="text-xs font-medium text-mist/70">Accepted: JPG, JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF, HEIC, HEIF.</p>

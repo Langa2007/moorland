@@ -25,8 +25,9 @@ app.use(helmet({
 
 app.use(cors({
   origin(origin, callback) {
-    const allowedOrigins = new Set([env.frontendUrl, env.adminUrl, ...env.corsOrigins]);
-    if (!origin || allowedOrigins.has(origin) || !isProduction) return callback(null, true);
+    const normalizedOrigin = origin?.replace(/\/+$/, "");
+    const allowedOrigins = new Set([env.frontendUrl, env.adminUrl, ...env.corsOrigins].filter(Boolean));
+    if (!normalizedOrigin || allowedOrigins.has(normalizedOrigin) || !isProduction) return callback(null, true);
     return callback(new Error("Not allowed by CORS"));
   },
   credentials: true

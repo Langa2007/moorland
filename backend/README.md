@@ -15,7 +15,7 @@ npm.cmd run dev
 API base URL:
 
 ```text
-http://127.0.0.1:5000/api
+https://moorland.onrender.com/api
 ```
 
 Default admin from `.env.example`:
@@ -29,13 +29,19 @@ Change these before production.
 
 ## Data Storage
 
-The backend uses a persistent JSON file at:
+The backend uses Postgres/Neon when `DATABASE_URL`, `DATABASE_URL_NEON`, or another supported Postgres URL env var is present.
 
-```text
-backend/data/database.json
+Run the initial schema/data seed with:
+
+```powershell
+npm.cmd run seed
 ```
 
-This keeps the backend working immediately without setting up PostgreSQL/MySQL. Later, replace `src/db/jsonStore.js` with a real database adapter while keeping the route contracts.
+Create or update the admin user with:
+
+```powershell
+npm.cmd run createadmin
+```
 
 ## Public Endpoints
 

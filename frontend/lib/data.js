@@ -302,7 +302,7 @@ export function normalizeSiteData(site = {}) {
 }
 
 export async function getSiteData() {
-  const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000/api";
+  const apiBase = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://moorland.onrender.com/api").replace(/\/+$/, "");
   try {
     const response = await fetch(`${apiBase}/site`, { next: { revalidate: 60 } });
     if (!response.ok) throw new Error("Site API unavailable");

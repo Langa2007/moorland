@@ -7,6 +7,9 @@ await db.ready?.();
 const server = app.listen(env.port, () => {
   console.log(`Moorland House & SPA API running on port ${env.port}`);
   console.log(`Storage: ${usingPostgres ? "Postgres" : "JSON file preview"}`);
+  if (env.backendUrl) console.log(`Backend URL: ${env.backendUrl}`);
+  if (env.frontendUrl) console.log(`Frontend URL allowed: ${env.frontendUrl}`);
+  if (env.adminUrl) console.log(`Admin URL allowed: ${env.adminUrl}`);
 });
 
 function shutdown(signal) {

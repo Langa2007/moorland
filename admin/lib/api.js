@@ -1,50 +1,59 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000/api";
+import axios from "axios";
 
-async function parseResponse(response) {
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok || payload.success === false) {
-    throw new Error(payload.message || payload.error || `Request failed with ${response.status}`);
-  }
-  return payload.data;
+const API_BASE = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://moorland.onrender.com/api").replace(/\/+$/, "");
+
+function unwrap(response) {
+  return response.data?.data;
+}
+
+function normalizeError(error) {
+  return new Error(error.response?.data?.message || error.response?.data?.error || error.message || "Request failed");
 }
 
 export function createApi(token) {
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const client = axios.create({
+    baseURL: API_BASE,
+    timeout: 20000,
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
 
   return {
     async login(credentials) {
-      const response = await fetch(`${API_BASE}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials)
-      });
-      return parseResponse(response);
+      try {
+        return unwrap(await client.post("/auth/login", credentials));
+      } catch (error) {
+        throw normalizeError(error);
+      }
     },
     async get(path) {
-      const response = await fetch(`${API_BASE}${path}`, { headers, cache: "no-store" });
-      return parseResponse(response);
+      try {
+        return unwrap(await client.get(path));
+      } catch (error) {
+        throw normalizeError(error);
+      }
     },
     async send(path, method, body) {
-      const response = await fetch(`${API_BASE}${path}`, {
-        method,
-        headers: { ...headers, "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      return parseResponse(response);
+      try {
+        return unwrap(await client.request({ url: path, method, data: body }));
+      } catch (error) {
+        throw normalizeError(error);
+      }
     },
     async upload(file) {
       const body = new FormData();
       body.append("image", file);
-      const response = await fetch(`${API_BASE}/admin/uploads/image`, {
-        method: "POST",
-        headers,
-        body
-      });
-      return parseResponse(response);
+      try {
+        return unwrap(await client.post("/admin/uploads/image", body));
+      } catch (error) {
+        throw normalizeError(error);
+      }
     },
     async remove(path) {
-      const response = await fetch(`${API_BASE}${path}`, { method: "DELETE", headers });
-      return parseResponse(response);
+      try {
+        return unwrap(await client.delete(path));
+      } catch (error) {
+        throw normalizeError(error);
+      }
     }
   };
 }

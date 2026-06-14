@@ -429,6 +429,7 @@ function Dashboard({ dashboard }) {
 
 function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
   const [draft, setDraft] = useState(meta);
+  const [saveStatus, setSaveStatus] = useState("");
   useEffect(() => setDraft(meta), [meta]);
 
   function update(key, value) {
@@ -442,6 +443,17 @@ function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
     }));
   }
 
+  async function saveSlot(key, value) {
+    const nextDraft = {
+      ...draft,
+      imageSlots: { ...(draft.imageSlots || {}), [key]: value }
+    };
+    setDraft(nextDraft);
+    setSaveStatus(`Saving ${toTitle(key)}...`);
+    await onSave(nextDraft);
+    setSaveStatus(`${toTitle(key)} updated on the public site.`);
+  }
+
   return (
     <form
       className="grid gap-5"
@@ -453,8 +465,9 @@ function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
       <section className="rounded-lg bg-ivory p-5 shadow-soft">
         <h3 className="font-serif text-2xl font-bold">Global image slots</h3>
         <p className="mt-2 text-sm leading-6 text-mist">
-          These slots feed the fixed image positions on the public website. Upload or paste a Cloudinary URL, then save settings.
+          These slots feed the fixed image positions on the public website. Uploading here saves the slot immediately.
         </p>
+        {saveStatus && <p className="mt-3 rounded-lg bg-pool/15 p-3 text-sm font-bold text-charcoal">{saveStatus}</p>}
         <div className="mt-5 grid gap-5 md:grid-cols-2">
           {imageSlotLabels.map(([key, label, hint]) => (
             <ImageField
@@ -462,7 +475,7 @@ function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
               label={label}
               hint={hint}
               value={draft.imageSlots?.[key] || ""}
-              onChange={(value) => updateSlot(key, value)}
+              onChange={(value) => saveSlot(key, value)}
               api={api}
             />
           ))}
@@ -471,7 +484,7 @@ function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
 
       <MediaLibrary
         uploads={uploads}
-        onUse={(slot, url) => updateSlot(slot, url)}
+        onUse={(slot, url) => saveSlot(slot, url)}
         onDelete={async (id) => {
           await api.remove(`/admin/uploads/${id}`);
           await onRefresh?.();
@@ -589,10 +602,14 @@ function ContentEditor({ collection, config, records, editing, setEditing, onSav
 
 function RecordForm({ config, record, onCancel, onSave, api }) {
   const [draft, setDraft] = useState(record);
+  const [saveHint, setSaveHint] = useState("");
   useEffect(() => setDraft(record), [record]);
 
   function update(key, value) {
     setDraft((current) => ({ ...current, [key]: value }));
+    if (key === "featuredImage" || key === "image" || key === "gallery") {
+      setSaveHint("Image added. Click Save to publish this record to the public site.");
+    }
   }
 
   return (
@@ -604,6 +621,7 @@ function RecordForm({ config, record, onCancel, onSave, api }) {
       }}
     >
       <h3 className="font-serif text-2xl font-bold">{draft.id ? "Edit" : "Create"} {config.label}</h3>
+      {saveHint && <p className="rounded-lg bg-pool/15 p-3 text-sm font-bold text-charcoal">{saveHint}</p>}
       {config.fields.map(([key, type]) => (
         <Field key={key} name={key} type={type} value={draft[key]} onChange={(value) => update(key, value)} api={api} />
       ))}
@@ -681,34 +699,22 @@ function ImageField({ label, value, onChange, api, compact = false, hint = "" })
 
   async function upload(event) {
     const file = event.target.files?.[0];
-    console.log("[ImageField] File selection changed. Selected file:", file ? { name: file.name, type: file.type, size: file.size } : "none");
-    
-    if (!file) {
-      console.warn("[ImageField] No file chosen.");
-      return;
-    }
+    if (!file) return;
     
     setUploading(true);
     setError("");
     try {
-      console.log("[ImageField] Starting upload request via API for:", file.name);
       const image = await api.upload(file);
-      console.log("[ImageField] API upload success. Received image record:", image);
       
       if (!image || !image.url) {
         throw new Error("Server response did not include an image URL: " + JSON.stringify(image));
       }
       
-      console.log("[ImageField] Updating parent state with URL:", image.url);
-      onChange(image.url);
-      alert(`Success: ${file.name} uploaded successfully!\nURL: ${image.url}`);
+      await Promise.resolve(onChange(image.url));
     } catch (uploadError) {
-      console.error("[ImageField] Upload process failed:", uploadError);
       const errMsg = uploadError.message || "Image upload failed.";
       setError(errMsg);
-      alert(`Upload Failed:\n${errMsg}`);
     } finally {
-      console.log("[ImageField] Finalizing upload state.");
       setUploading(false);
       event.target.value = "";
     }
@@ -724,19 +730,11 @@ function ImageField({ label, value, onChange, api, compact = false, hint = "" })
         type="button"
         className={`btn btn-ghost cursor-pointer ${uploading ? "pointer-events-none opacity-60" : ""}`}
         onClick={() => {
-          console.log("[ImageField] Upload button clicked for:", label);
           if (!fileInputRef.current) {
-            console.error("[ImageField] fileInputRef is null!");
-            alert("Error: File input element not found in the DOM.");
+            setError("File input element not found. Refresh the page and try again.");
             return;
           }
-          console.log("[ImageField] Triggering click on input element.");
-          try {
-            fileInputRef.current.click();
-          } catch (err) {
-            console.error("[ImageField] Failed to click file input programmatically:", err);
-            alert("Failed to open file picker: " + err.message);
-          }
+          fileInputRef.current.click();
         }}
       >
         {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}

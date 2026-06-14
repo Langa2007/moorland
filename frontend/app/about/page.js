@@ -1,6 +1,8 @@
 import SectionHeading from "@/components/SectionHeading";
 import { getSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "About Us",
   description: "The story, team philosophy, and location details for Moorland House & Spa."

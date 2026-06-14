@@ -2,6 +2,8 @@ import BookingPanel from "@/components/BookingPanel";
 import SectionHeading from "@/components/SectionHeading";
 import { getSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Luxury Accommodations",
   description: "Presidential Suite, Executive Suite, and Superior Suite accommodation at Moorland House & Spa."

@@ -1,6 +1,8 @@
 import SectionHeading from "@/components/SectionHeading";
 import { getSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Pool & Grounds",
   description: "Turquoise pool, wooden decks, lush gardens, and panoramic setting."

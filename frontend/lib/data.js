@@ -309,7 +309,7 @@ export function normalizeSiteData(site = {}) {
 export async function getSiteData() {
   const apiBase = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://moorland.onrender.com/api").replace(/\/+$/, "");
   try {
-    const response = await fetch(`${apiBase}/site`, { next: { revalidate: 60 } });
+    const response = await fetch(`${apiBase}/site`, { cache: "no-store" });
     if (!response.ok) throw new Error("Site API unavailable");
     const payload = await response.json();
     return normalizeSiteData(payload.data);

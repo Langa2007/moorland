@@ -31,6 +31,7 @@ router.get("/health", (_req, res) => {
 
 router.get("/site", asyncHandler(async (_req, res) => {
   const data = await db.all();
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
   res.json({
     success: true,
     data: {

@@ -2,6 +2,8 @@ import BookingPanel from "@/components/BookingPanel";
 import SectionHeading from "@/components/SectionHeading";
 import { getSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Spa & Wellness",
   description: "Luxury Spa treatments, wellness rituals, and booking requests at Moorland House & Spa."

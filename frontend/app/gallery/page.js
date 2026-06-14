@@ -2,6 +2,8 @@ import GalleryGrid from "@/components/GalleryGrid";
 import SectionHeading from "@/components/SectionHeading";
 import { getSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Gallery",
   description: "Filtered masonry gallery with lightbox for pool, cuisine, rooms, exteriors, and lifestyle imagery."

@@ -3,6 +3,8 @@ import FoodOrder from "@/components/FoodOrder";
 import SectionHeading from "@/components/SectionHeading";
 import { getSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "The Lounge",
   description: "African and international cuisine, lounge reservations, ambience gallery, and order requests."

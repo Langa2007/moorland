@@ -1,6 +1,8 @@
 import SectionHeading from "@/components/SectionHeading";
 import { getSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Blog & Wellness",
   description: "Wellness, cuisine, and hospitality stories from Moorland House & Spa."

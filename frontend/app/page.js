@@ -7,6 +7,8 @@ import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
 import { getSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const { contact, experiences, images, menuItems, rooms, spaServices, gallery, testimonials } = await getSiteData();
 

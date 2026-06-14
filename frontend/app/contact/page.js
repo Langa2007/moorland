@@ -2,6 +2,8 @@ import ContactForm from "@/components/ContactForm";
 import SectionHeading from "@/components/SectionHeading";
 import { getSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Contact & Location",
   description: "Contact Moorland House & Spa by phone, WhatsApp, email, directions, or inquiry form."

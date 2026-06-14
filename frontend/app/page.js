@@ -42,7 +42,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Our Experience"
             title="A complete luxury escape for dining, wellness, stays, and celebrations."
-            text="This preview uses curated placeholders. Your client's real pool, lounge, room, exterior, garden, signage, and lifestyle photos can replace these from admin later."
+            text="Dining, wellness, accommodation, gardens, and poolside spaces come together in one polished Migori destination."
           />
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {experiences.map((item) => (
@@ -64,7 +64,7 @@ export default async function HomePage() {
             <SectionHeading
               eyebrow="The Lounge"
               title="African warmth, international polish, and a menu built for memorable evenings."
-              text="Preview the cuisine direction with rich food photography, dietary tags, prices, and cart-ready ordering."
+              text="Explore signature plates, dietary notes, pricing, and an easy order request flow."
             />
             <Link href="/lounge" className="btn-secondary mt-8">View Lounge & Menu</Link>
           </div>
@@ -88,7 +88,7 @@ export default async function HomePage() {
             <p className="eyebrow text-pool">SPA & Wellness</p>
             <h2 className="heading-lg mt-3">Quiet rituals, warm oils, and restorative care.</h2>
             <p className="mt-5 text-lg leading-8 text-cream/80">
-              Services are presented with duration, pricing, and treatment imagery ready for real availability later.
+              Choose from calming treatments designed for deep rest, recovery, and quiet celebration.
             </p>
           </div>
           <div className="grid gap-4">
@@ -112,7 +112,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Luxury Accommodations"
             title="Three suite tiers, presented in the requested order."
-            text="Presidential Suite, Executive Suite, and Superior Suite are ready for galleries, amenities, rates, and booking flow."
+            text="Presidential Suite, Executive Suite, and Superior Suite each offer warm finishes, calm privacy, and attentive service."
           />
           <div className="mt-10 grid gap-5 lg:grid-cols-3">
             {rooms.map((room) => (
@@ -148,7 +148,7 @@ export default async function HomePage() {
 
       <section className="section-pad bg-cream">
         <div className="luxury-container">
-          <SectionHeading eyebrow="Guest Trust" title="Opening soon with a clear preview of the experience." align="center" />
+          <SectionHeading eyebrow="Guest Trust" title="Opening soon with a clear sense of the experience." align="center" />
           <div className="mt-10">
             <Testimonials items={testimonials} />
           </div>
@@ -157,7 +157,7 @@ export default async function HomePage() {
 
       <section className="section-pad bg-ivory">
         <div className="luxury-container">
-          <SectionHeading eyebrow="Gallery Teaser" title="A cinematic gallery ready for authentic client photos." />
+          <SectionHeading eyebrow="Gallery Teaser" title="A cinematic look at Moorland's spaces and experiences." />
           <div className="mt-10">
             <GalleryGrid items={gallery} />
           </div>

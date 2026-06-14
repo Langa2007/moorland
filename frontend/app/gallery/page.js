@@ -16,8 +16,8 @@ export default async function GalleryPage() {
         <div className="luxury-container">
           <SectionHeading
             eyebrow="Gallery"
-            title="A filtered masonry gallery ready for authentic client photos."
-            text="Use admin later to replace placeholders with pool, lounge, cuisine, room, exterior, garden, signage, and lifestyle images."
+            title="A filtered masonry gallery of Moorland's spaces."
+            text="Explore pool, lounge, cuisine, rooms, exteriors, gardens, and lifestyle moments."
           />
           <div className="mt-10">
             <GalleryGrid items={gallery} />

@@ -51,7 +51,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs text-cream/60">
-        Copyright 2026 Moorland House & SPA. Frontend preview prepared for booking, admin, and payment integration.
+        Copyright 2026 Moorland House & SPA. All rights reserved.
       </div>
     </footer>
   );

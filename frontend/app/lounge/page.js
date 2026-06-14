@@ -5,7 +5,7 @@ import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "The Lounge",
-  description: "African and international cuisine, reservations, ambience gallery, and online ordering preview."
+  description: "African and international cuisine, lounge reservations, ambience gallery, and order requests."
 };
 
 export default async function LoungePage() {
@@ -19,15 +19,15 @@ export default async function LoungePage() {
             <SectionHeading
               eyebrow="The Lounge"
               title="A warm, elegant lounge for African classics, international plates, and refined evenings."
-              text="Menu categories include cuisine photography, prices, descriptions, dietary tags, and a client-side order preview."
+              text="Browse cuisine photography, prices, descriptions, dietary tags, and order requests."
             />
           </div>
-          <img src={images.lounge} alt="Elegant Moorland lounge and dining room placeholder" className="h-[520px] w-full rounded-lg object-cover shadow-soft" />
+          <img src={images.lounge} alt="Elegant Moorland lounge and dining room" className="h-[520px] w-full rounded-lg object-cover shadow-soft" />
         </div>
       </section>
       <section className="section-pad bg-ivory">
         <div className="luxury-container">
-          <SectionHeading eyebrow="Food & Drink" title="Order preview with Kenyan-friendly payment messaging." />
+          <SectionHeading eyebrow="Food & Drink" title="Signature plates, lounge favourites, and easy order requests." />
           <div className="mt-10">
             <FoodOrder items={menuItems} />
           </div>
@@ -40,7 +40,7 @@ export default async function LoungePage() {
       </section>
       <section className="section-pad bg-ivory">
         <div className="luxury-container">
-          <SectionHeading eyebrow="Ambiance" title="Lounge and cuisine gallery placeholders." />
+          <SectionHeading eyebrow="Ambiance" title="Lounge and cuisine moments." />
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {gallery.filter((item) => item.category === "Lounge & Cuisine").map((item) => (
               <img key={item.title} src={item.image} alt={item.title} className="h-80 w-full rounded-lg object-cover shadow-soft" loading="lazy" />

@@ -13,7 +13,7 @@ export default async function PoolGroundsPage() {
     <main className="pt-24">
       <section className="section-pad bg-ivory">
         <div className="luxury-container grid gap-10 lg:grid-cols-2 lg:items-center">
-          <img src={images.pool} alt="Moorland turquoise pool and deck placeholder" className="h-[620px] w-full rounded-lg object-cover shadow-soft" />
+          <img src={images.pool} alt="Moorland turquoise pool and deck" className="h-[620px] w-full rounded-lg object-cover shadow-soft" />
           <SectionHeading
             eyebrow="Pool & Grounds"
             title="A serene outdoor setting for golden-hour relaxation."

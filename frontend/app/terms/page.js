@@ -44,7 +44,7 @@ const sections = [
   {
     title: "6. Website Content",
     body: [
-      "Images, descriptions, menus, room details, service information, and opening content are provided for general guidance. Some preview images may be placeholders until official venue photography is uploaded.",
+      "Images, descriptions, menus, room details, service information, and opening content are provided for general guidance and may be updated as services, photography, pricing, and operating details evolve.",
       "Moorland House & SPA may update website content at any time to reflect current services, photography, pricing, and operating details."
     ]
   },

@@ -36,7 +36,6 @@ export const images = {
 
 function imageUrl(value, fallback = "/logo.png") {
   if (!value || typeof value !== "string") return fallback;
-  if (value.includes("images.unsplash.com")) return fallback;
   return value;
 }
 

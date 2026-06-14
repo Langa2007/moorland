@@ -4,7 +4,7 @@ import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "SPA & Wellness",
-  description: "Luxury SPA treatments with booking calendar preview and availability messaging."
+  description: "Luxury SPA treatments, wellness rituals, and booking requests at Moorland House & SPA."
 };
 
 export default async function SpaPage() {
@@ -18,10 +18,10 @@ export default async function SpaPage() {
             <p className="eyebrow text-pool">SPA & Wellness</p>
             <h1 className="heading-lg mt-3">Rejuvenating rituals for quiet recovery.</h1>
             <p className="mt-5 text-lg leading-8 text-cream/80">
-              Treatment imagery, pricing, duration, and booking previews are ready for backend availability.
+              Treatment rituals, pricing, duration, and easy booking requests for restorative care.
             </p>
           </div>
-          <img src={images.spa} alt="Luxury SPA treatment placeholder" className="h-[520px] w-full rounded-lg object-cover shadow-soft" />
+          <img src={images.spa} alt="Luxury SPA treatment room" className="h-[520px] w-full rounded-lg object-cover shadow-soft" />
         </div>
       </section>
       <section className="section-pad bg-ivory">

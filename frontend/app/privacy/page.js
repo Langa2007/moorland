@@ -38,7 +38,7 @@ const sections = [
     title: "5. Data Security",
     body: [
       "We aim to protect guest information using reasonable technical and organizational safeguards. No online system is completely risk-free, so guests should avoid sending sensitive payment details through ordinary messages.",
-      "Payment processing should be handled through secure payment providers once the booking and payment gateway integrations are live."
+      "Payment processing should be handled through secure payment providers and official Moorland House & SPA channels."
     ]
   },
   {

@@ -18,7 +18,7 @@ export default async function AboutPage() {
             title="A modern classic retreat shaped by Kenyan hospitality."
             text="Moorland House & SPA is designed as a refined Migori destination where food, wellness, rooms, poolside leisure, and quiet service come together in one serene setting."
           />
-          <img src={images.garden} alt="Moorland exterior and gardens placeholder" className="h-[520px] w-full rounded-lg object-cover shadow-soft" />
+          <img src={images.garden} alt="Moorland exterior and gardens" className="h-[520px] w-full rounded-lg object-cover shadow-soft" />
         </div>
       </section>
       <section className="section-pad bg-ivory">

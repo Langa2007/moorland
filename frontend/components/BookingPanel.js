@@ -7,17 +7,17 @@ export default function BookingPanel({ type = "stay" }) {
     stay: {
       title: "Check Room Availability",
       fields: ["Check-in", "Check-out", "Guests"],
-      action: "Preview Stay Booking"
+      action: "Request Stay"
     },
     spa: {
       title: "Book a SPA Treatment",
       fields: ["Date", "Preferred time", "Guests"],
-      action: "Preview SPA Booking"
+      action: "Request SPA Booking"
     },
     lounge: {
       title: "Reserve Lounge Table",
       fields: ["Date", "Time", "Guests"],
-      action: "Preview Reservation"
+      action: "Request Reservation"
     }
   }[type];
 
@@ -59,12 +59,12 @@ export default function BookingPanel({ type = "stay" }) {
       <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
         <button className="btn-secondary" type="submit">{copy.action}</button>
         <p className="text-sm leading-6 text-mist">
-          Availability preview only. Backend booking, deposits, M-Pesa, card, and mobile money will connect later.
+          Share your preferred date and guest count. The Moorland team will confirm availability and next steps.
         </p>
       </div>
       {submitted && (
         <p className="mt-4 rounded-lg bg-pool/15 p-3 text-sm font-bold text-charcoal" role="status">
-          Preview request captured. A real confirmation flow will be connected to the backend.
+          Thank you. Your request has been captured for confirmation.
         </p>
       )}
     </form>

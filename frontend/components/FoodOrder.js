@@ -50,10 +50,10 @@ export default function FoodOrder({ items = menuItems }) {
       </div>
 
       <aside className="soft-card h-fit rounded-lg p-5 lg:sticky lg:top-28">
-        <h3 className="font-serif text-2xl font-bold">Order Preview</h3>
+        <h3 className="font-serif text-2xl font-bold">Your Order</h3>
         <div className="mt-4 grid gap-3">
           {cart.length === 0 ? (
-            <p className="text-sm leading-6 text-mist">Add dishes to preview the lounge ordering experience.</p>
+            <p className="text-sm leading-6 text-mist">Add dishes and our lounge team will confirm your request.</p>
           ) : (
             cart.map((item, index) => (
               <div key={`${item.id}-${index}`} className="flex justify-between gap-4 border-b border-mist/15 pb-3 text-sm">
@@ -67,8 +67,8 @@ export default function FoodOrder({ items = menuItems }) {
           <span>Total</span>
           <span>KSh {total.toLocaleString()}</span>
         </div>
-        <button className="btn-primary mt-5 w-full" type="button">Checkout Preview</button>
-        <p className="mt-3 text-xs leading-5 text-mist">M-Pesa STK push, card, and mobile money will connect to backend payment gateways.</p>
+        <button className="btn-primary mt-5 w-full" type="button">Request Order</button>
+        <p className="mt-3 text-xs leading-5 text-mist">The team will confirm availability, timing, and payment details.</p>
       </aside>
     </div>
   );

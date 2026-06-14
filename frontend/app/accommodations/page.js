@@ -4,7 +4,7 @@ import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "Luxury Accommodations",
-  description: "Presidential Suite, Executive Suite, and Superior Suite booking preview."
+  description: "Presidential Suite, Executive Suite, and Superior Suite accommodation at Moorland House & SPA."
 };
 
 export default async function AccommodationsPage() {
@@ -17,7 +17,7 @@ export default async function AccommodationsPage() {
           <SectionHeading
             eyebrow="Boutique Rooms"
             title="Luxury suites with panoramic calm and warm hospitality."
-            text="Room types are shown in the exact requested order with rates, amenities, galleries, and booking preview."
+            text="Compare suite tiers, rates, amenities, and comfort details before requesting your stay."
           />
           <div className="mt-12 grid gap-10">
             {rooms.map((room, index) => (

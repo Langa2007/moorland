@@ -37,7 +37,7 @@ export default async function ContactPage() {
         <div className="luxury-container">
           <div className="overflow-hidden rounded-lg shadow-soft">
             <iframe
-              title="Moorland House and SPA map placeholder"
+              title="Moorland House and SPA map"
               src="https://www.google.com/maps?q=Migori%20Town%20Kenya&output=embed"
               className="h-[480px] w-full border-0"
               loading="lazy"

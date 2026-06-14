@@ -265,13 +265,14 @@ export default function AdminApp() {
     setUser(null);
   }
 
-  async function saveRecord(formRecord) {
-    const targetCollection = formRecord.__collection || collection;
+  async function saveRecord(targetCollection, formRecord) {
+    if (!collectionConfig[targetCollection]) {
+      throw new Error(`Unsupported admin collection: ${targetCollection || "missing"}`);
+    }
     const method = formRecord.id ? "PATCH" : "POST";
     const path = formRecord.id ? `/admin/${targetCollection}/${formRecord.id}` : `/admin/${targetCollection}`;
     const payload = { ...formRecord };
     delete payload.id;
-    delete payload.__collection;
     await api.send(path, method, payload);
     setEditing(null);
     await refreshAll();
@@ -392,7 +393,7 @@ export default function AdminApp() {
             records={records[collection] || []}
             editing={editing}
             setEditing={setEditing}
-            onSave={saveRecord}
+            onSave={(record) => saveRecord(collection, record)}
             onDelete={deleteRecord}
             api={api}
           />
@@ -565,11 +566,11 @@ function MediaLibrary({ uploads, onUse, onDelete }) {
 
 function ContentEditor({ collection, config, records, editing, setEditing, onSave, onDelete, api }) {
   function startNewRecord() {
-    setEditing({ ...emptyRecords[collection], __collection: collection });
+    setEditing({ ...emptyRecords[collection] });
   }
 
   function startEditRecord(record) {
-    setEditing({ ...record, __collection: collection });
+    setEditing({ ...record });
   }
 
   return (

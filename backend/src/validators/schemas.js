@@ -7,7 +7,7 @@ const phone = z.string().min(7).max(30);
 
 export const idParamSchema = z.object({
   id: z.string().min(2)
-});
+}).passthrough();
 
 export const slugParamSchema = z.object({
   slug: z.string().min(2)

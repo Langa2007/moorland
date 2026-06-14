@@ -43,9 +43,25 @@ const transactionalCollections = [
   "uploads"
 ];
 
-function getConfig(collection) {
-  const config = collectionConfig[collection];
-  if (!config) throw new AppError(`Unsupported admin collection: ${collection}`, 404);
+function normalizeCollection(collection, body = {}) {
+  if (collection === "galleryItems") return "gallery";
+  if (
+    (collection === "undefined" || collection === undefined) &&
+    typeof body === "object" &&
+    body &&
+    "category" in body &&
+    "title" in body &&
+    "image" in body
+  ) {
+    return "gallery";
+  }
+  return collection;
+}
+
+function getConfig(collection, body) {
+  const normalizedCollection = normalizeCollection(collection, body);
+  const config = collectionConfig[normalizedCollection];
+  if (!config) throw new AppError(`Unsupported admin collection: ${collection || "missing"}`, 404);
   return config;
 }
 
@@ -106,14 +122,15 @@ router.patch(
 );
 
 router.get("/:collection", asyncHandler(async (req, res) => {
-  getConfig(req.params.collection);
-  res.json({ success: true, data: (await db.get(req.params.collection)) || [] });
+  const collection = normalizeCollection(req.params.collection);
+  getConfig(collection);
+  res.json({ success: true, data: (await db.get(collection)) || [] });
 }));
 
 router.post("/:collection", asyncHandler(async (req, res, next) => {
   try {
-    const { collection } = req.params;
-    const config = getConfig(collection);
+    const collection = normalizeCollection(req.params.collection, req.body);
+    const config = getConfig(collection, req.body);
     const parsed = config.schema.safeParse(req.body);
     if (!parsed.success) throw new AppError("Validation failed", 422, parsed.error.flatten());
     const payload = {
@@ -130,8 +147,9 @@ router.post("/:collection", asyncHandler(async (req, res, next) => {
 
 router.patch("/:collection/:id", validate(idParamSchema, "params"), asyncHandler(async (req, res, next) => {
   try {
-    const { collection, id } = req.params;
-    const config = getConfig(collection);
+    const { id } = req.params;
+    const collection = normalizeCollection(req.params.collection, req.body);
+    const config = getConfig(collection, req.body);
     const current = ((await db.get(collection)) || []).find((item) => item.id === id);
     const parsed = current ? config.schema.partial().safeParse(req.body) : config.schema.safeParse(req.body);
     if (!parsed.success) throw new AppError("Validation failed", 422, parsed.error.flatten());
@@ -150,7 +168,8 @@ router.patch("/:collection/:id", validate(idParamSchema, "params"), asyncHandler
 
 router.delete("/:collection/:id", validate(idParamSchema, "params"), asyncHandler(async (req, res, next) => {
   try {
-    const { collection, id } = req.params;
+    const { id } = req.params;
+    const collection = normalizeCollection(req.params.collection);
     getConfig(collection);
     const record = await db.remove(collection, id);
     if (!record) return next(notFound("Record not found"));

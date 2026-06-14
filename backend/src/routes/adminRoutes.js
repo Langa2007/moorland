@@ -133,14 +133,15 @@ router.patch("/:collection/:id", validate(idParamSchema, "params"), asyncHandler
     const { collection, id } = req.params;
     const config = getConfig(collection);
     const current = ((await db.get(collection)) || []).find((item) => item.id === id);
-    if (!current) return next(notFound("Record not found"));
-    const parsed = config.schema.partial().safeParse(req.body);
+    const parsed = current ? config.schema.partial().safeParse(req.body) : config.schema.safeParse(req.body);
     if (!parsed.success) throw new AppError("Validation failed", 422, parsed.error.flatten());
     const payload = { ...parsed.data };
     if (config.slug && !payload.slug && (payload.title || payload.name)) {
       payload.slug = createSlug(payload.title || payload.name);
     }
-    const record = await db.update(collection, id, payload);
+    const record = current
+      ? await db.update(collection, id, payload)
+      : await db.insert(collection, { id, ...payload });
     return res.json({ success: true, data: record });
   } catch (error) {
     return next(error);

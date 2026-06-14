@@ -39,6 +39,10 @@ function imageUrl(value, fallback = "/logo.png") {
   return value;
 }
 
+function collectionOrFallback(site, key, fallback) {
+  return Array.isArray(site[key]) ? site[key] : fallback;
+}
+
 export const experiences = [
   {
     title: "Elegant Lounge",
@@ -228,17 +232,22 @@ function money(value) {
 export function normalizeSiteData(site = {}) {
   const meta = site.meta || contact;
   const slots = meta.imageSlots || {};
+  const slotImage = (key) => (
+    Object.prototype.hasOwnProperty.call(slots, key)
+      ? imageUrl(slots[key])
+      : imageUrl(images[key])
+  );
   const siteImages = {
     ...images,
-    hero: imageUrl(slots.hero || images.hero),
-    pool: imageUrl(slots.pool || images.pool),
-    spa: imageUrl(slots.spa || images.spa),
-    lounge: imageUrl(slots.lounge || images.lounge),
-    suite: imageUrl(slots.suite || images.suite),
-    garden: imageUrl(slots.garden || images.garden)
+    hero: slotImage("hero"),
+    pool: slotImage("pool"),
+    spa: slotImage("spa"),
+    lounge: slotImage("lounge"),
+    suite: slotImage("suite"),
+    garden: slotImage("garden")
   };
 
-  const normalizedMenuItems = (site.menuItems?.length ? site.menuItems : menuItems).map((item) => ({
+  const normalizedMenuItems = collectionOrFallback(site, "menuItems", menuItems).map((item) => ({
     id: item.id,
     category: item.category,
     name: item.name,
@@ -248,7 +257,7 @@ export function normalizeSiteData(site = {}) {
     image: imageUrl(item.featuredImage || item.image)
   }));
 
-  const normalizedSpaServices = (site.spaServices?.length ? site.spaServices : spaServices).map((service) => ({
+  const normalizedSpaServices = collectionOrFallback(site, "spaServices", spaServices).map((service) => ({
     id: service.id,
     name: service.name,
     duration: service.duration || `${service.durationMinutes} min`,
@@ -257,7 +266,7 @@ export function normalizeSiteData(site = {}) {
     image: imageUrl(service.featuredImage || service.image)
   }));
 
-  const normalizedRooms = (site.rooms?.length ? site.rooms : rooms).map((room) => ({
+  const normalizedRooms = collectionOrFallback(site, "rooms", rooms).map((room) => ({
     id: room.id,
     name: room.name,
     rate: room.rateLabel || room.rate,
@@ -296,13 +305,13 @@ export function normalizeSiteData(site = {}) {
     menuItems: normalizedMenuItems,
     spaServices: normalizedSpaServices,
     rooms: normalizedRooms,
-    gallery: (site.gallery?.length ? site.gallery : gallery).map((item) => ({
+    gallery: collectionOrFallback(site, "gallery", gallery).map((item) => ({
       category: item.category,
       title: item.title,
       image: imageUrl(item.image)
     })),
-    testimonials: site.testimonials?.length ? site.testimonials : testimonials,
-    blogPosts: site.blogPosts?.length ? site.blogPosts : blogPosts
+    testimonials: collectionOrFallback(site, "testimonials", testimonials),
+    blogPosts: collectionOrFallback(site, "blogPosts", blogPosts)
   };
 }
 

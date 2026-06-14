@@ -266,18 +266,20 @@ export default function AdminApp() {
   }
 
   async function saveRecord(formRecord) {
+    const targetCollection = formRecord.__collection || collection;
     const method = formRecord.id ? "PATCH" : "POST";
-    const path = formRecord.id ? `/admin/${collection}/${formRecord.id}` : `/admin/${collection}`;
+    const path = formRecord.id ? `/admin/${targetCollection}/${formRecord.id}` : `/admin/${targetCollection}`;
     const payload = { ...formRecord };
     delete payload.id;
+    delete payload.__collection;
     await api.send(path, method, payload);
     setEditing(null);
     await refreshAll();
   }
 
-  async function deleteRecord(id) {
+  async function deleteRecord(id, targetCollection = collection) {
     if (!window.confirm("Delete this record?")) return;
-    await api.remove(`/admin/${collection}/${id}`);
+    await api.remove(`/admin/${targetCollection}/${id}`);
     await refreshAll();
   }
 
@@ -342,6 +344,7 @@ export default function AdminApp() {
               label={config.label}
               onClick={() => {
                 setCollection(key);
+                setEditing(null);
                 setView("content");
               }}
             />
@@ -561,10 +564,18 @@ function MediaLibrary({ uploads, onUse, onDelete }) {
 }
 
 function ContentEditor({ collection, config, records, editing, setEditing, onSave, onDelete, api }) {
+  function startNewRecord() {
+    setEditing({ ...emptyRecords[collection], __collection: collection });
+  }
+
+  function startEditRecord(record) {
+    setEditing({ ...record, __collection: collection });
+  }
+
   return (
     <div className="grid gap-5 xl:grid-cols-[1fr_440px]">
       <section className="grid gap-4">
-        <button className="btn btn-accent w-fit" type="button" onClick={() => setEditing({ ...emptyRecords[collection] })}>
+        <button className="btn btn-accent w-fit" type="button" onClick={startNewRecord}>
           <Plus className="h-4 w-4" />
           New {config.label}
         </button>
@@ -577,11 +588,11 @@ function ContentEditor({ collection, config, records, editing, setEditing, onSav
               <p className="mt-2 line-clamp-2 text-sm leading-6 text-mist">{record.description || record.excerpt || record.quote || record.message || record.id}</p>
             </div>
             <div className="flex gap-2 md:flex-col">
-              <button className="btn btn-ghost" type="button" onClick={() => setEditing(record)}>
+              <button className="btn btn-ghost" type="button" onClick={() => startEditRecord(record)}>
                 <Pencil className="h-4 w-4" />
                 Edit
               </button>
-              <button className="btn btn-danger" type="button" onClick={() => onDelete(record.id)}>
+              <button className="btn btn-danger" type="button" onClick={() => onDelete(record.id, collection)}>
                 <Trash2 className="h-4 w-4" />
                 Delete
               </button>
@@ -603,32 +614,51 @@ function ContentEditor({ collection, config, records, editing, setEditing, onSav
 function RecordForm({ config, record, onCancel, onSave, api }) {
   const [draft, setDraft] = useState(record);
   const [saveHint, setSaveHint] = useState("");
-  useEffect(() => setDraft(record), [record]);
+  const [saveError, setSaveError] = useState("");
+  const [saving, setSaving] = useState(false);
+  useEffect(() => {
+    setDraft(record);
+    setSaveHint("");
+    setSaveError("");
+    setSaving(false);
+  }, [record]);
 
   function update(key, value) {
     setDraft((current) => ({ ...current, [key]: value }));
+    setSaveError("");
     if (key === "featuredImage" || key === "image" || key === "gallery") {
       setSaveHint("Image added. Click Save to publish this record to the public site.");
+    }
+  }
+
+  async function submit(event) {
+    event.preventDefault();
+    setSaving(true);
+    setSaveError("");
+    try {
+      await onSave(draft);
+    } catch (error) {
+      setSaveError(error.message || "Save failed. Please try again.");
+    } finally {
+      setSaving(false);
     }
   }
 
   return (
     <form
       className="grid gap-4"
-      onSubmit={(event) => {
-        event.preventDefault();
-        onSave(draft);
-      }}
+      onSubmit={submit}
     >
       <h3 className="font-serif text-2xl font-bold">{draft.id ? "Edit" : "Create"} {config.label}</h3>
       {saveHint && <p className="rounded-lg bg-pool/15 p-3 text-sm font-bold text-charcoal">{saveHint}</p>}
+      {saveError && <p className="rounded-lg bg-red-100 p-3 text-sm font-bold text-red-800">{saveError}</p>}
       {config.fields.map(([key, type]) => (
         <Field key={key} name={key} type={type} value={draft[key]} onChange={(value) => update(key, value)} api={api} />
       ))}
       <div className="flex flex-wrap gap-2">
-        <button className="btn btn-primary" type="submit">
-          <Save className="h-4 w-4" />
-          Save
+        <button className="btn btn-primary" type="submit" disabled={saving}>
+          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          {saving ? "Saving..." : "Save"}
         </button>
         <button className="btn btn-ghost" type="button" onClick={onCancel}>Cancel</button>
       </div>

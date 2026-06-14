@@ -6,9 +6,9 @@ export default function Footer() {
     <footer className="bg-charcoal text-ivory">
       <div className="luxury-container grid gap-10 py-14 lg:grid-cols-[1.2fr_1fr_1fr]">
         <div>
-          <p className="font-serif text-3xl font-bold">Moorland House & SPA</p>
+          <p className="font-serif text-3xl font-bold">Moorland House & Spa</p>
           <p className="mt-3 max-w-md text-sm leading-7 text-cream/80">
-            Where Elegance Meets Serenity. A luxury lounge, SPA, boutique accommodation, pool, and gardens destination
+            Where Elegance Meets Serenity. A luxury lounge, Spa, boutique accommodation, pool, and gardens destination
             opening on 1 July 2026.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -51,7 +51,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs text-cream/60">
-        Copyright 2026 Moorland House & SPA. All rights reserved.
+        Copyright 2026 Moorland House & Spa. All rights reserved.
       </div>
     </footer>
   );

@@ -4,7 +4,7 @@ import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "Contact & Location",
-  description: "Contact Moorland House & SPA by phone, WhatsApp, email, directions, or inquiry form."
+  description: "Contact Moorland House & Spa by phone, WhatsApp, email, directions, or inquiry form."
 };
 
 export default async function ContactPage() {
@@ -18,7 +18,7 @@ export default async function ContactPage() {
             <SectionHeading
               eyebrow="Contact & Location"
               title="Reach the opening team."
-              text="Use the form for accommodation, SPA, lounge, events, and private dining inquiries. Phone and WhatsApp are ready for immediate client calls."
+              text="Use the form for accommodation, Spa, lounge, events, and private dining inquiries. Phone and WhatsApp are ready for immediate guest calls."
             />
             <div className="mt-8 grid gap-3 text-lg">
               <a href={contact.phoneLink} className="font-black text-wood">{contact.phone}</a>
@@ -37,7 +37,7 @@ export default async function ContactPage() {
         <div className="luxury-container">
           <div className="overflow-hidden rounded-lg shadow-soft">
             <iframe
-              title="Moorland House and SPA map"
+              title="Moorland House and Spa map"
               src="https://www.google.com/maps?q=Migori%20Town%20Kenya&output=embed"
               className="h-[480px] w-full border-0"
               loading="lazy"

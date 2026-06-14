@@ -3,7 +3,7 @@ import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "About Us",
-  description: "The story, team philosophy, and location details for Moorland House & SPA."
+  description: "The story, team philosophy, and location details for Moorland House & Spa."
 };
 
 export default async function AboutPage() {
@@ -16,9 +16,9 @@ export default async function AboutPage() {
           <SectionHeading
             eyebrow="About Moorland"
             title="A modern classic retreat shaped by Kenyan hospitality."
-            text="Moorland House & SPA is designed as a refined Migori destination where food, wellness, rooms, poolside leisure, and quiet service come together in one serene setting."
+            text="Moorland House & Spa is designed as a refined Migori destination where food, wellness, rooms, poolside leisure, and quiet service come together in one serene setting."
           />
-          <img src={images.garden} alt="Moorland exterior and gardens" className="h-[520px] w-full rounded-lg object-cover shadow-soft" />
+          <img src={images.garden} alt="Moorland exterior and gardens" className="aspect-[4/3] w-full rounded-lg object-cover shadow-soft lg:aspect-[5/4]" />
         </div>
       </section>
       <section className="section-pad bg-ivory">

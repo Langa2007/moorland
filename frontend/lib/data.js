@@ -7,14 +7,14 @@ export const contact = {
   location: "Migori Town, Nairobi, Kenya",
   socials: [
     { label: "Instagram", handle: "@moorlandhouse_spa", href: "https://instagram.com/moorlandhouse_spa" },
-    { label: "Facebook", handle: "Moorland House & SPA", href: "https://facebook.com/moorlandhousespa" },
+    { label: "Facebook", handle: "Moorland House & Spa", href: "https://facebook.com/moorlandhousespa" },
     { label: "TikTok", handle: "@moorlandhouse_spa", href: "https://tiktok.com/@moorlandhouse_spa" }
   ]
 };
 
 export const navItems = [
   { label: "Lounge", href: "/lounge" },
-  { label: "SPA", href: "/spa" },
+  { label: "Spa", href: "/spa" },
   { label: "Rooms", href: "/accommodations" },
   { label: "Pool", href: "/pool-grounds" },
   { label: "Gallery", href: "/gallery" },
@@ -47,7 +47,7 @@ export const experiences = [
     href: "/lounge"
   },
   {
-    title: "SPA & Wellness",
+    title: "Spa & Wellness",
     text: "Massage, facials, body rituals, couples treatments, and calm recovery spaces.",
     image: images.spa,
     href: "/spa"
@@ -153,7 +153,7 @@ export const rooms = [
     name: "Presidential Suite",
     rate: "From KSh 38,000 / night",
     desc: "The most expansive suite, designed for privacy, hosting, and panoramic relaxation.",
-    amenities: ["Private lounge", "King bed", "Freestanding bath", "Panoramic balcony", "Priority SPA booking"],
+    amenities: ["Private lounge", "King bed", "Freestanding bath", "Panoramic balcony", "Priority Spa booking"],
     image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1800&q=85"
   },
   {
@@ -181,7 +181,7 @@ export const gallery = [
   { category: "Rooms", title: "Presidential Suite bedroom", image: rooms[0].image },
   { category: "Rooms", title: "Executive Suite calm interiors", image: rooms[1].image },
   { category: "Exteriors", title: "Warm architecture and gardens", image: images.garden },
-  { category: "Lifestyle", title: "SPA treatment moment", image: spaServices[1].image },
+  { category: "Lifestyle", title: "Spa treatment moment", image: spaServices[1].image },
   { category: "Lifestyle", title: "Couples retreat mood", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=85" }
 ];
 
@@ -192,7 +192,7 @@ export const testimonials = [
     role: "Corporate retreat planner"
   },
   {
-    quote: "The lounge and SPA concept feels warm without losing the high-end atmosphere. We are already planning a launch weekend.",
+    quote: "The lounge and Spa concept feels warm without losing the high-end atmosphere. We are already planning a launch weekend.",
     name: "Preview Guest",
     role: "Nairobi hospitality buyer"
   },
@@ -206,11 +206,11 @@ export const testimonials = [
 export const blogPosts = [
   {
     title: "A New Luxury Escape Arrives in Migori",
-    excerpt: "What guests can expect from the grand opening of Moorland House & SPA.",
+    excerpt: "What guests can expect from the grand opening of Moorland House & Spa.",
     tag: "Opening Soon"
   },
   {
-    title: "The Art of a Restorative SPA Weekend",
+    title: "The Art of a Restorative Spa Weekend",
     excerpt: "How to pair massage, quiet pool time, and nourishing cuisine.",
     tag: "Wellness"
   },
@@ -281,7 +281,7 @@ export function normalizeSiteData(site = {}) {
         href: "/lounge"
       },
       {
-        title: "SPA & Wellness",
+        title: "Spa & Wellness",
         text: "Massage, facials, body rituals, couples treatments, and calm recovery spaces.",
         image: siteImages.spa,
         href: "/spa"

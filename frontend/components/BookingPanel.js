@@ -10,9 +10,9 @@ export default function BookingPanel({ type = "stay" }) {
       action: "Request Stay"
     },
     spa: {
-      title: "Book a SPA Treatment",
+      title: "Book a Spa Treatment",
       fields: ["Date", "Preferred time", "Guests"],
-      action: "Request SPA Booking"
+      action: "Request Spa Booking"
     },
     lounge: {
       title: "Reserve Lounge Table",
@@ -31,7 +31,7 @@ export default function BookingPanel({ type = "stay" }) {
         setSubmitted(true);
       }}
     >
-      <h3 className="font-serif text-2xl font-bold">{copy.title}</h3>
+      <h3 className="font-serif text-2xl font-bold leading-tight">{copy.title}</h3>
       <div className="mt-5 grid gap-4 md:grid-cols-3">
         {copy.fields.map((field, index) => (
           <label key={field} className="grid gap-2 text-sm font-bold text-mist">

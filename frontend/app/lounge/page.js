@@ -22,7 +22,7 @@ export default async function LoungePage() {
               text="Browse cuisine photography, prices, descriptions, dietary tags, and order requests."
             />
           </div>
-          <img src={images.lounge} alt="Elegant Moorland lounge and dining room" className="h-[520px] w-full rounded-lg object-cover shadow-soft" />
+          <img src={images.lounge} alt="Elegant Moorland lounge and dining room" className="aspect-[4/3] w-full rounded-lg object-cover shadow-soft lg:aspect-[5/4]" />
         </div>
       </section>
       <section className="section-pad bg-ivory">
@@ -43,7 +43,7 @@ export default async function LoungePage() {
           <SectionHeading eyebrow="Ambiance" title="Lounge and cuisine moments." />
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {gallery.filter((item) => item.category === "Lounge & Cuisine").map((item) => (
-              <img key={item.title} src={item.image} alt={item.title} className="h-80 w-full rounded-lg object-cover shadow-soft" loading="lazy" />
+              <img key={item.title} src={item.image} alt={item.title} className="aspect-[4/3] w-full rounded-lg object-cover shadow-soft" loading="lazy" />
             ))}
           </div>
         </div>

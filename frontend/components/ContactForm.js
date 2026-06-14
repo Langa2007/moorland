@@ -50,7 +50,7 @@ export default function ContactForm() {
           Interest
           <select className="field" name="interest" defaultValue="Accommodation">
             <option>Accommodation</option>
-            <option>SPA booking</option>
+            <option>Spa booking</option>
             <option>Lounge reservation</option>
             <option>Events and private dining</option>
           </select>

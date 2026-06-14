@@ -681,15 +681,34 @@ function ImageField({ label, value, onChange, api, compact = false, hint = "" })
 
   async function upload(event) {
     const file = event.target.files?.[0];
-    if (!file) return;
+    console.log("[ImageField] File selection changed. Selected file:", file ? { name: file.name, type: file.type, size: file.size } : "none");
+    
+    if (!file) {
+      console.warn("[ImageField] No file chosen.");
+      return;
+    }
+    
     setUploading(true);
     setError("");
     try {
+      console.log("[ImageField] Starting upload request via API for:", file.name);
       const image = await api.upload(file);
+      console.log("[ImageField] API upload success. Received image record:", image);
+      
+      if (!image || !image.url) {
+        throw new Error("Server response did not include an image URL: " + JSON.stringify(image));
+      }
+      
+      console.log("[ImageField] Updating parent state with URL:", image.url);
       onChange(image.url);
+      alert(`Success: ${file.name} uploaded successfully!\nURL: ${image.url}`);
     } catch (uploadError) {
-      setError(uploadError.message || "Image upload failed.");
+      console.error("[ImageField] Upload process failed:", uploadError);
+      const errMsg = uploadError.message || "Image upload failed.";
+      setError(errMsg);
+      alert(`Upload Failed:\n${errMsg}`);
     } finally {
+      console.log("[ImageField] Finalizing upload state.");
       setUploading(false);
       event.target.value = "";
     }
@@ -704,14 +723,28 @@ function ImageField({ label, value, onChange, api, compact = false, hint = "" })
       <button
         type="button"
         className={`btn btn-ghost cursor-pointer ${uploading ? "pointer-events-none opacity-60" : ""}`}
-        onClick={() => fileInputRef.current?.click()}
+        onClick={() => {
+          console.log("[ImageField] Upload button clicked for:", label);
+          if (!fileInputRef.current) {
+            console.error("[ImageField] fileInputRef is null!");
+            alert("Error: File input element not found in the DOM.");
+            return;
+          }
+          console.log("[ImageField] Triggering click on input element.");
+          try {
+            fileInputRef.current.click();
+          } catch (err) {
+            console.error("[ImageField] Failed to click file input programmatically:", err);
+            alert("Failed to open file picker: " + err.message);
+          }
+        }}
       >
         {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
         {uploading ? "Uploading..." : compact ? "Upload and append" : "Upload image"}
       </button>
       <input
         ref={fileInputRef}
-        className="hidden"
+        className="sr-only"
         type="file"
         accept={acceptedImageTypes}
         disabled={uploading}

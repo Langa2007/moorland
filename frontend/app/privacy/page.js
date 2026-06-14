@@ -2,7 +2,7 @@ import { contact } from "@/lib/data";
 
 export const metadata = {
   title: "Privacy Policy",
-  description: "Privacy Policy for Moorland House & SPA."
+  description: "Privacy Policy for Moorland House & Spa."
 };
 
 const sections = [
@@ -10,13 +10,13 @@ const sections = [
     title: "1. Information We Collect",
     body: [
       "We may collect your name, phone number, email address, booking dates, guest count, room or service preferences, dining requests, payment reference details, and any message you send through our website, WhatsApp, phone, email, or social media channels.",
-      "When online payments and booking systems are connected, payment details may be processed by trusted payment providers such as M-Pesa, mobile money, or card payment partners. Moorland House & SPA should not store full card numbers on this website."
+      "Payment details may be processed by trusted payment providers such as M-Pesa, mobile money, or card payment partners. Moorland House & Spa should not store full card numbers on this website."
     ]
   },
   {
     title: "2. How We Use Your Information",
     body: [
-      "We use your information to respond to inquiries, manage accommodation bookings, reserve lounge tables, schedule SPA treatments, prepare food and drink orders, process deposits or payments, send booking confirmations, and provide guest support.",
+      "We use your information to respond to inquiries, manage accommodation bookings, reserve lounge tables, schedule Spa treatments, prepare food and drink orders, process deposits or payments, send booking confirmations, and provide guest support.",
       "We may also use your contact details to send opening announcements, offers, newsletters, and service updates where you have chosen to receive them."
     ]
   },
@@ -37,8 +37,8 @@ const sections = [
   {
     title: "5. Data Security",
     body: [
-      "We aim to protect guest information using reasonable technical and organizational safeguards. No online system is completely risk-free, so guests should avoid sending sensitive payment details through ordinary messages.",
-      "Payment processing should be handled through secure payment providers and official Moorland House & SPA channels."
+      "We aim to protect guest information with reasonable security safeguards. No online system is completely risk-free, so guests should avoid sending sensitive payment details through ordinary messages.",
+      "Payment processing should be handled through secure payment providers and official Moorland House & Spa channels."
     ]
   },
   {
@@ -64,7 +64,7 @@ export default function PrivacyPage() {
           <p className="eyebrow">Privacy Policy</p>
           <h1 className="heading-lg mt-3">Privacy Policy</h1>
           <p className="mt-5 text-lg leading-8 text-mist">
-            This Privacy Policy explains how Moorland House & SPA collects, uses, protects, and shares information from
+            This Privacy Policy explains how Moorland House & Spa collects, uses, protects, and shares information from
             guests and website visitors.
           </p>
           <p className="mt-3 text-sm font-bold text-wood">Last updated: 11 June 2026</p>

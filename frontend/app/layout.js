@@ -5,13 +5,13 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 export const metadata = {
   title: {
-    default: "Moorland House & SPA | Where Elegance Meets Serenity",
-    template: "%s | Moorland House & SPA"
+    default: "Moorland House & Spa | Where Elegance Meets Serenity",
+    template: "%s | Moorland House & Spa"
   },
   description:
-    "Moorland House & SPA is Migori Town's premier luxury lounge, spa, and boutique accommodation venue opening on 1 July 2026.",
+    "Moorland House & Spa is Migori Town's premier luxury lounge, spa, and boutique accommodation venue opening on 1 July 2026.",
   keywords: [
-    "Moorland House & SPA",
+    "Moorland House & Spa",
     "Migori luxury hotel",
     "Kenya spa",
     "African cuisine Migori",
@@ -20,10 +20,10 @@ export const metadata = {
   ],
   metadataBase: new URL("https://moorlandhouse-spa.com"),
   openGraph: {
-    title: "Moorland House & SPA",
+    title: "Moorland House & Spa",
     description: "Where Elegance Meets Serenity",
     url: "https://moorlandhouse-spa.com",
-    siteName: "Moorland House & SPA",
+    siteName: "Moorland House & Spa",
     locale: "en_KE",
     type: "website"
   }
@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Hotel",
-    name: "Moorland House & SPA",
+    name: "Moorland House & Spa",
     slogan: "Where Elegance Meets Serenity",
     openingDate: "2026-07-01",
     telephone: "+254727623260",
@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
       addressCountry: "KE"
     },
     amenityFeature: [
-      { "@type": "LocationFeatureSpecification", name: "Luxury SPA", value: true },
+      { "@type": "LocationFeatureSpecification", name: "Luxury Spa", value: true },
       { "@type": "LocationFeatureSpecification", name: "Boutique rooms", value: true },
       { "@type": "LocationFeatureSpecification", name: "Pool and gardens", value: true },
       { "@type": "LocationFeatureSpecification", name: "African and international lounge cuisine", value: true }

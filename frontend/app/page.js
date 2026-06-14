@@ -23,17 +23,32 @@ export default async function HomePage() {
             <h1 className="heading-xl">Where Elegance Meets Serenity</h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-cream md:text-2xl">
               Migori Town's Premier Luxury Escape - Elegant Lounge with African & International Cuisine -
-              Rejuvenating SPA - Boutique Rooms with Panoramic Views
+              Rejuvenating Spa - Boutique Rooms with Panoramic Views
             </p>
             <div className="mt-8 grid max-w-2xl gap-4 sm:grid-cols-3">
               <Link href="/lounge" className="btn-primary">Explore Lounge</Link>
-              <Link href="/spa#booking" className="btn-ghost">Book SPA</Link>
+              <Link href="/spa#booking" className="btn-ghost">Book Spa</Link>
               <Link href="/accommodations#booking" className="btn-ghost">Book Stay</Link>
             </div>
           </div>
           <div className="mt-10 max-w-2xl">
             <Countdown />
           </div>
+        </div>
+      </section>
+
+      <section className="bg-charcoal py-5 text-ivory">
+        <div className="luxury-container grid gap-3 md:grid-cols-3">
+          {[
+            ["Book Room", "/accommodations#booking", "Compare suites and request your stay."],
+            ["Reserve Table", "/lounge#reservation", "Plan lunch, dinner, or a private gathering."],
+            ["Book Spa", "/spa#booking", "Choose a calming treatment time."]
+          ].map(([label, href, text]) => (
+            <Link key={href} href={href} className="rounded-lg border border-white/15 bg-white/10 p-4 transition hover:border-pool hover:bg-white/15">
+              <span className="block font-serif text-2xl font-bold">{label}</span>
+              <span className="mt-1 block text-sm leading-6 text-cream/80">{text}</span>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -47,7 +62,7 @@ export default async function HomePage() {
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {experiences.map((item) => (
               <Link href={item.href} key={item.title} className="group overflow-hidden rounded-lg bg-ivory shadow-soft">
-                <img src={item.image} alt={item.title} className="h-72 w-full object-cover transition duration-300 group-hover:scale-[1.03]" loading="lazy" />
+                <img src={item.image} alt={item.title} className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.03]" loading="lazy" />
                 <div className="p-6">
                   <h3 className="font-serif text-3xl font-bold">{item.title}</h3>
                   <p className="mt-3 leading-7 text-mist">{item.text}</p>
@@ -85,7 +100,7 @@ export default async function HomePage() {
       <section className="section-pad bg-charcoal text-ivory">
         <div className="luxury-container grid gap-8 lg:grid-cols-2">
           <div>
-            <p className="eyebrow text-pool">SPA & Wellness</p>
+            <p className="eyebrow text-pool">Spa & Wellness</p>
             <h2 className="heading-lg mt-3">Quiet rituals, warm oils, and restorative care.</h2>
             <p className="mt-5 text-lg leading-8 text-cream/80">
               Choose from calming treatments designed for deep rest, recovery, and quiet celebration.
@@ -102,7 +117,7 @@ export default async function HomePage() {
                 <p className="mt-3 leading-7 text-cream/80">{service.desc}</p>
               </div>
             ))}
-            <Link href="/spa" className="btn-primary w-fit">View SPA Services</Link>
+            <Link href="/spa" className="btn-primary w-fit">View Spa Services</Link>
           </div>
         </div>
       </section>
@@ -117,7 +132,7 @@ export default async function HomePage() {
           <div className="mt-10 grid gap-5 lg:grid-cols-3">
             {rooms.map((room) => (
               <article key={room.name} className="overflow-hidden rounded-lg bg-ivory shadow-soft">
-                <img src={room.image} alt={room.name} className="h-72 w-full object-cover" loading="lazy" />
+                <img src={room.image} alt={room.name} className="aspect-[4/3] w-full object-cover" loading="lazy" />
                 <div className="p-6">
                   <h3 className="font-serif text-3xl font-bold">{room.name}</h3>
                   <p className="mt-2 font-black text-wood">{room.rate}</p>
@@ -134,7 +149,7 @@ export default async function HomePage() {
 
       <section className="section-pad bg-ivory">
         <div className="luxury-container grid gap-10 lg:grid-cols-2 lg:items-center">
-          <img src={images.pool} alt="Turquoise pool, wooden decks, and serene gardens" className="h-[560px] w-full rounded-lg object-cover shadow-soft" loading="lazy" />
+          <img src={images.pool} alt="Turquoise pool, wooden decks, and serene gardens" className="aspect-[4/3] w-full rounded-lg object-cover shadow-soft lg:aspect-[5/4]" loading="lazy" />
           <div>
             <SectionHeading
               eyebrow="Pool & Grounds"

@@ -4,7 +4,7 @@ import { getSiteData } from "@/lib/data";
 
 export const metadata = {
   title: "Luxury Accommodations",
-  description: "Presidential Suite, Executive Suite, and Superior Suite accommodation at Moorland House & SPA."
+  description: "Presidential Suite, Executive Suite, and Superior Suite accommodation at Moorland House & Spa."
 };
 
 export default async function AccommodationsPage() {
@@ -22,7 +22,7 @@ export default async function AccommodationsPage() {
           <div className="mt-12 grid gap-10">
             {rooms.map((room, index) => (
               <article key={room.name} className="grid overflow-hidden rounded-lg bg-ivory shadow-soft lg:grid-cols-2">
-                <img src={room.image} alt={room.name} className={`h-full min-h-[420px] w-full object-cover ${index % 2 ? "lg:order-2" : ""}`} />
+                <img src={room.image} alt={room.name} className={`aspect-[4/3] w-full object-cover lg:aspect-auto lg:h-full lg:min-h-[360px] ${index % 2 ? "lg:order-2" : ""}`} />
                 <div className="p-7 md:p-10">
                   <p className="eyebrow">Suite {index + 1}</p>
                   <h2 className="heading-md mt-2">{room.name}</h2>

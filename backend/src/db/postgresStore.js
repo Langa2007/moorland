@@ -21,9 +21,11 @@ const collectionTables = {
   accommodationBookings: "accommodation_bookings",
   spaBookings: "spa_bookings",
   loungeReservations: "lounge_reservations",
+  eventBookings: "event_bookings",
   foodOrders: "food_orders",
   contacts: "contacts",
   newsletterSubscribers: "newsletter_subscribers",
+  reviews: "reviews",
   payments: "payments",
   uploads: "uploads"
 };

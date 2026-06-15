@@ -3,6 +3,7 @@ import BookingPanel from "@/components/BookingPanel";
 import Countdown from "@/components/Countdown";
 import GalleryGrid from "@/components/GalleryGrid";
 import Newsletter from "@/components/Newsletter";
+import ReviewForm from "@/components/ReviewForm";
 import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
 import { getSiteData } from "@/lib/data";
@@ -144,7 +145,7 @@ export default async function HomePage() {
             ))}
           </div>
           <div id="booking" className="mt-10">
-            <BookingPanel type="stay" />
+            <BookingPanel type="stay" rooms={rooms} />
           </div>
         </div>
       </section>
@@ -168,6 +169,9 @@ export default async function HomePage() {
           <SectionHeading eyebrow="Guest Trust" title="Opening soon with a clear sense of the experience." align="center" />
           <div className="mt-10">
             <Testimonials items={testimonials} />
+          </div>
+          <div className="mt-8">
+            <ReviewForm />
           </div>
         </div>
       </section>

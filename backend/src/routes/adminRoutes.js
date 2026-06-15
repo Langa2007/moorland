@@ -7,6 +7,7 @@ import {
   blogPostSchema,
   galleryItemSchema,
   idParamSchema,
+  inquiryReplySchema,
   menuItemSchema,
   metaSchema,
   roomSchema,
@@ -17,6 +18,8 @@ import {
 import { AppError, notFound } from "../utils/errors.js";
 import { asyncHandler } from "../utils/errors.js";
 import { createId, createSlug, now } from "../utils/ids.js";
+import { updateTransactionStatus } from "../services/transactionService.js";
+import { sendGuestNotification } from "../services/emailService.js";
 
 const router = express.Router();
 
@@ -36,9 +39,11 @@ const transactionalCollections = [
   "accommodationBookings",
   "spaBookings",
   "loungeReservations",
+  "eventBookings",
   "foodOrders",
   "contacts",
   "newsletterSubscribers",
+  "reviews",
   "payments",
   "uploads"
 ];
@@ -78,13 +83,17 @@ router.get("/dashboard", asyncHandler(async (_req, res) => {
         accommodationBookings: data.accommodationBookings.length,
         spaBookings: data.spaBookings.length,
         loungeReservations: data.loungeReservations.length,
+        eventBookings: data.eventBookings.length,
         foodOrders: data.foodOrders.length,
         contacts: data.contacts.length,
-        newsletterSubscribers: data.newsletterSubscribers.length
+        newsletterSubscribers: data.newsletterSubscribers.length,
+        reviews: data.reviews.length,
+        payments: data.payments.length
       },
       recent: {
         accommodationBookings: data.accommodationBookings.slice(-5).reverse(),
         spaBookings: data.spaBookings.slice(-5).reverse(),
+        eventBookings: data.eventBookings.slice(-5).reverse(),
         foodOrders: data.foodOrders.slice(-5).reverse(),
         contacts: data.contacts.slice(-5).reverse()
       }
@@ -115,8 +124,26 @@ router.patch(
   asyncHandler(async (req, res, next) => {
     const { collection, id } = req.params;
     if (!transactionalCollections.includes(collection)) return next(notFound("Collection not found"));
-    const record = await db.update(collection, id, { status: req.body.status });
+    const record = await updateTransactionStatus(collection, id, req.body.status);
     if (!record) return next(notFound("Record not found"));
+    return res.json({ success: true, data: record });
+  })
+);
+
+router.post(
+  "/transactions/contacts/:id/reply",
+  validate(idParamSchema, "params"),
+  validate(inquiryReplySchema),
+  asyncHandler(async (req, res, next) => {
+    const message = (await db.get("contacts")).find((item) => item.id === req.params.id);
+    if (!message) return next(notFound("Inquiry not found"));
+    await sendGuestNotification({
+      to: message.email,
+      subject: req.body.subject,
+      title: req.body.subject,
+      lines: [req.body.message]
+    });
+    const record = await updateTransactionStatus("contacts", message.id, "completed");
     return res.json({ success: true, data: record });
   })
 );

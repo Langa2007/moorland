@@ -4,8 +4,7 @@ import { db } from "../db/index.js";
 import { AppError } from "../utils/errors.js";
 
 export async function requireAuth(req, _res, next) {
-  const header = req.headers.authorization || "";
-  const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+  const token = req.cookies?.moorland_admin_token || null;
 
   if (!token) {
     return next(new AppError("Authentication required", 401));

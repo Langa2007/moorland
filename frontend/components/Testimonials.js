@@ -15,6 +15,7 @@ export default function Testimonials({ items = testimonials }) {
 
   return (
     <div className="soft-card rounded-lg p-8 text-center">
+      <p className="mb-3 text-sm font-black text-pool">{"*".repeat(item.rating || 5)}</p>
       <p className="mx-auto max-w-3xl font-serif text-2xl leading-snug text-charcoal">"{item.quote}"</p>
       <p className="mt-5 font-black">{item.name}</p>
       <p className="text-sm text-mist">{item.role}</p>

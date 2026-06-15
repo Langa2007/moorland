@@ -42,7 +42,15 @@ export const env = {
   cloudinaryFolder: process.env.CLOUDINARY_FOLDER || "moorland",
   resendApiKey: process.env.RESEND_API_KEY || "",
   resendFromEmail: process.env.RESEND_FROM_EMAIL || "Moorland House & SPA <onboarding@resend.dev>",
-  adminNotifyEmail: process.env.ADMIN_NOTIFY_EMAIL || process.env.ADMIN_EMAIL || "admin@moorlandhouse-spa.com"
+  adminNotifyEmail: process.env.ADMIN_NOTIFY_EMAIL || process.env.ADMIN_EMAIL || "admin@moorlandhouse-spa.com",
+  mpesaEnv: (process.env.MPESA_ENV || process.env.MPESA_ENVIRONMENT || "sandbox").toLowerCase(),
+  mpesaConsumerKey: process.env.MPESA_CONSUMER_KEY || "",
+  mpesaConsumerSecret: process.env.MPESA_CONSUMER_SECRET || "",
+  mpesaShortcode: process.env.MPESA_SHORTCODE || process.env.MPESA_BUSINESS_SHORT_CODE || "",
+  mpesaPasskey: process.env.MPESA_PASSKEY || "",
+  mpesaCallbackUrl: cleanUrl(process.env.MPESA_CALLBACK_URL || ""),
+  mpesaAccountReference: process.env.MPESA_ACCOUNT_REFERENCE || "Moorland",
+  mpesaTransactionDesc: process.env.MPESA_TRANSACTION_DESC || "Moorland booking payment"
 };
 
 export const isProduction = env.nodeEnv === "production";

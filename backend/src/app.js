@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
+import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import { env, isProduction } from "./config/env.js";
@@ -42,6 +43,7 @@ app.use(rateLimit({
 
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(morgan(isProduction ? "combined" : "dev"));
 
 app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));

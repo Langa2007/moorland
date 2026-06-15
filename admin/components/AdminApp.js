@@ -98,6 +98,7 @@ const collectionConfig = {
     fields: [
       ["name", "text"],
       ["role", "text"],
+      ["rating", "number"],
       ["quote", "textarea"],
       ["active", "boolean"]
     ]
@@ -119,9 +120,11 @@ const transactionCollections = [
   "accommodationBookings",
   "spaBookings",
   "loungeReservations",
+  "eventBookings",
   "foodOrders",
   "contacts",
   "newsletterSubscribers",
+  "reviews",
   "payments",
   "uploads"
 ];
@@ -132,7 +135,7 @@ const emptyRecords = {
   menuItems: { category: "", name: "", slug: "", description: "", price: 0, tags: [], featuredImage: "", active: true },
   gallery: { category: "", title: "", image: "", active: true },
   blogPosts: { title: "", slug: "", excerpt: "", content: "", tag: "", featuredImage: "", published: false },
-  testimonials: { name: "", role: "", quote: "", active: true },
+  testimonials: { name: "", role: "", rating: 5, quote: "", active: true },
   availabilityBlocks: { type: "room", resourceId: "", from: "2026-07-01", to: "2026-07-02", reason: "" }
 };
 
@@ -186,8 +189,8 @@ function toFormValue(type, value) {
 }
 
 export default function AdminApp() {
-  const [token, setToken] = useState("");
   const [user, setUser] = useState(null);
+  const [sessionChecked, setSessionChecked] = useState(false);
   const [view, setView] = useState("dashboard");
   const [collection, setCollection] = useState("rooms");
   const [dashboard, setDashboard] = useState(null);
@@ -198,19 +201,21 @@ export default function AdminApp() {
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const api = useMemo(() => createApi(token), [token]);
+  const api = useMemo(() => createApi(handleUnauthorized), []);
   const activeConfig = collectionConfig[collection];
 
   useEffect(() => {
-    const savedToken = window.localStorage.getItem("moorland_admin_token");
-    const savedUser = window.localStorage.getItem("moorland_admin_user");
-    if (savedToken) setToken(savedToken);
-    if (savedUser) setUser(JSON.parse(savedUser));
+    createApi().get("/auth/me")
+      .then((me) => {
+        setUser(me);
+      })
+      .catch(() => { /* No session - stay on login screen */ })
+      .finally(() => setSessionChecked(true));
   }, []);
 
   useEffect(() => {
-    if (token) refreshAll();
-  }, [token]);
+    if (user) refreshAll();
+  }, [user]);
 
   async function refreshAll() {
     setLoading(true);
@@ -247,10 +252,8 @@ export default function AdminApp() {
         email: formData.get("email"),
         password: formData.get("password")
       });
-      window.localStorage.setItem("moorland_admin_token", result.token);
-      window.localStorage.setItem("moorland_admin_user", JSON.stringify(result.user));
-      setToken(result.token);
       setUser(result.user);
+      setSessionChecked(true);
     } catch (error) {
       setStatus(error.message);
     } finally {
@@ -258,11 +261,16 @@ export default function AdminApp() {
     }
   }
 
-  function logout() {
-    window.localStorage.removeItem("moorland_admin_token");
-    window.localStorage.removeItem("moorland_admin_user");
-    setToken("");
+  function handleUnauthorized() {
+    console.error(`[Admin Auth Error] Unauthorized API access. Cookie session may be invalid or expired. Redirecting to login. Timestamp: ${new Date().toISOString()}`);
+    logout();
+    setStatus("Your session has expired. Please log in again.");
+  }
+
+  async function logout() {
+    try { await api.send("/auth/logout", "POST", {}); } catch (_e) { /* ignore */ }
     setUser(null);
+    setSessionChecked(true);
   }
 
   async function saveRecord(targetCollection, formRecord) {
@@ -289,7 +297,18 @@ export default function AdminApp() {
     await refreshAll();
   }
 
-  if (!token) {
+  if (!sessionChecked) {
+    return (
+      <main className="grid min-h-dvh place-items-center bg-cream p-5">
+        <div className="flex items-center gap-3 rounded-lg bg-ivory p-5 shadow-soft">
+          <Loader2 className="h-5 w-5 animate-spin text-pool" />
+          <p className="font-bold text-mist">Checking admin session...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!user) {
     return (
       <main className="grid min-h-dvh place-items-center bg-cream p-5">
         <form className="w-full max-w-md rounded-lg bg-ivory p-6 shadow-soft" onSubmit={handleLogin}>
@@ -419,14 +438,35 @@ function NavButton({ active, icon: Icon, label, onClick }) {
 
 function Dashboard({ dashboard }) {
   const counts = dashboard?.counts || {};
+  const recent = dashboard?.recent || {};
+  const revenue = Object.values(recent).flat().reduce((sum, record) => sum + Number(record.total || 0), 0);
+  const pending = Object.entries(counts)
+    .filter(([key]) => ["accommodationBookings", "spaBookings", "loungeReservations", "eventBookings", "foodOrders", "contacts", "reviews"].includes(key))
+    .reduce((sum, [, value]) => sum + Number(value || 0), 0);
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {Object.entries(counts).map(([key, value]) => (
-        <article key={key} className="rounded-lg bg-ivory p-5 shadow-soft">
-          <p className="text-sm font-black uppercase text-mist">{toTitle(key)}</p>
-          <p className="mt-3 text-4xl font-black">{value}</p>
+    <div className="grid gap-6">
+      <section className="grid gap-4 md:grid-cols-3">
+        <article className="rounded-lg bg-charcoal p-5 text-ivory shadow-soft">
+          <p className="text-sm font-black uppercase text-pool">Operational queue</p>
+          <p className="mt-3 text-4xl font-black">{pending}</p>
         </article>
-      ))}
+        <article className="rounded-lg bg-ivory p-5 shadow-soft">
+          <p className="text-sm font-black uppercase text-mist">Recent booking value</p>
+          <p className="mt-3 text-4xl font-black">KSh {revenue.toLocaleString()}</p>
+        </article>
+        <article className="rounded-lg bg-ivory p-5 shadow-soft">
+          <p className="text-sm font-black uppercase text-mist">Payments</p>
+          <p className="mt-3 text-4xl font-black">{counts.payments || 0}</p>
+        </article>
+      </section>
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {Object.entries(counts).map(([key, value]) => (
+          <article key={key} className="rounded-lg bg-ivory p-5 shadow-soft">
+            <p className="text-sm font-black uppercase text-mist">{toTitle(key)}</p>
+            <p className="mt-3 text-4xl font-black">{value}</p>
+          </article>
+        ))}
+      </section>
     </div>
   );
 }
@@ -708,8 +748,9 @@ function Field({ name, type, value, onChange, api }) {
         {toTitle(name)}
         <select className="field" value={value || "room"} onChange={(event) => onChange(event.target.value)}>
           <option value="room">Room</option>
-          <option value="spa">SPA</option>
+          <option value="spa">Spa</option>
           <option value="lounge">Lounge</option>
+          <option value="event">Event</option>
         </select>
       </label>
     );
@@ -803,6 +844,21 @@ function Transactions({ data, api, onRefresh }) {
     await onRefresh();
   }
 
+  async function verifyPayment(id) {
+    await api.send(`/payments/${id}/verify`, "POST", {});
+    await onRefresh();
+  }
+
+  async function replyToInquiry(record) {
+    const message = window.prompt(`Reply to ${record.name || record.email}`);
+    if (!message) return;
+    await api.send(`/admin/transactions/contacts/${record.id}/reply`, "POST", {
+      subject: "Response from Moorland House & Spa",
+      message
+    });
+    await onRefresh();
+  }
+
   return (
     <div className="grid gap-6">
       {Object.entries(data).map(([collection, records]) => (
@@ -826,11 +882,23 @@ function Transactions({ data, api, onRefresh }) {
                     Delete
                   </button>
                 ) : "status" in record && (
-                  <select className="field max-w-44" value={record.status} onChange={(event) => updateStatus(collection, record.id, event.target.value)}>
-                    {["new", "active", "pending", "confirmed", "cancelled", "completed", "paid", "failed"].map((status) => (
-                      <option key={status} value={status}>{toTitle(status)}</option>
-                    ))}
-                  </select>
+                  <div className="flex flex-wrap gap-2 md:justify-end">
+                    {collection === "payments" && record.method === "mpesa" ? (
+                      <button className="btn btn-ghost" type="button" onClick={() => verifyPayment(record.id)}>
+                        Verify
+                      </button>
+                    ) : null}
+                    {collection === "contacts" ? (
+                      <button className="btn btn-ghost" type="button" onClick={() => replyToInquiry(record)}>
+                        Reply
+                      </button>
+                    ) : null}
+                    <select className="field max-w-44" value={record.status} onChange={(event) => updateStatus(collection, record.id, event.target.value)}>
+                      {["new", "active", "pending", "confirmed", "cancelled", "completed", "paid", "failed"].map((status) => (
+                        <option key={status} value={status}>{toTitle(status)}</option>
+                      ))}
+                    </select>
+                  </div>
                 )}
               </article>
             ))}

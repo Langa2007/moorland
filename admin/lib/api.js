@@ -10,12 +10,24 @@ function normalizeError(error) {
   return new Error(error.response?.data?.message || error.response?.data?.error || error.message || "Request failed");
 }
 
-export function createApi(token) {
+export function createApi(onUnauthorized) {
   const client = axios.create({
     baseURL: API_BASE,
     timeout: 20000,
-    headers: token ? { Authorization: `Bearer ${token}` } : {}
+    withCredentials: true
   });
+
+  client.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        if (onUnauthorized) {
+          onUnauthorized();
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
 
   return {
     async login(credentials) {

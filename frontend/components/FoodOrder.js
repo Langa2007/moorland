@@ -2,11 +2,15 @@
 
 import { useMemo, useState } from "react";
 import { contact, menuItems } from "@/lib/data";
+import { apiClient } from "@/lib/apiClient";
 
 export default function FoodOrder({ items = menuItems }) {
   const [cart, setCart] = useState([]);
   const [category, setCategory] = useState("All");
   const [added, setAdded] = useState("");
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const categories = ["All", ...new Set(items.map((item) => item.category))];
   const visible = category === "All" ? items : items.filter((item) => item.category === category);
   const cartLines = useMemo(() => cart.reduce((lines, item) => {
@@ -30,8 +34,41 @@ export default function FoodOrder({ items = menuItems }) {
     setAdded(`${item.name} added to your order`);
   }
 
+  async function submitOrder(event) {
+    event.preventDefault();
+    if (!cartLines.length) return;
+    setSubmitting(true);
+    setError("");
+    setStatus("");
+    const form = new FormData(event.currentTarget);
+    try {
+      const response = await apiClient.post("/orders/food", {
+        name: form.get("name"),
+        email: form.get("email"),
+        phone: form.get("phone"),
+        orderType: form.get("orderType"),
+        tableNumber: form.get("tableNumber") || "",
+        deliveryAddress: form.get("deliveryAddress") || "",
+        paymentMethod: form.get("paymentMethod"),
+        items: cartLines.map((item) => ({
+          menuItemId: item.id,
+          quantity: item.quantity,
+          notes: ""
+        }))
+      });
+      const data = response.data?.data || {};
+      setStatus(`Order received. Reference: ${data.order?.id}. ${data.payment ? `${data.payment.status}: ${data.payment.instructions || ""}` : "The team will confirm payment."}`);
+      setCart([]);
+      event.currentTarget.reset();
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || requestError.message || "Could not submit order.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+    <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
       <div>
         <div className="mb-6 flex flex-wrap gap-2">
           {categories.map((item) => (
@@ -94,12 +131,30 @@ export default function FoodOrder({ items = menuItems }) {
           <span>Total</span>
           <span>KSh {total.toLocaleString()}</span>
         </div>
+        <form className="mt-5 grid gap-3" onSubmit={submitOrder}>
+          <input className="field" name="name" required placeholder="Full name" disabled={!cartLines.length} />
+          <input className="field" name="email" type="email" required placeholder="Email" disabled={!cartLines.length} />
+          <input className="field" name="phone" type="tel" required placeholder="2547..." disabled={!cartLines.length} />
+          <select className="field" name="orderType" defaultValue="pickup" disabled={!cartLines.length}>
+            <option value="pickup">Pickup</option>
+            <option value="table">Serve at table</option>
+            <option value="delivery">Delivery</option>
+          </select>
+          <input className="field" name="tableNumber" placeholder="Table number, if seated" disabled={!cartLines.length} />
+          <input className="field" name="deliveryAddress" placeholder="Delivery address, if needed" disabled={!cartLines.length} />
+          <select className="field" name="paymentMethod" defaultValue="mpesa" disabled={!cartLines.length}>
+            <option value="mpesa">M-PESA STK Push</option>
+            <option value="cash">Cash</option>
+          </select>
+          <button className="btn-primary w-full" type="submit" disabled={!cartLines.length || submitting}>
+            {submitting ? "Sending..." : "Submit Order"}
+          </button>
+        </form>
         {cartLines.length > 0 ? (
-          <a className="btn-primary mt-5 w-full" href={orderText} target="_blank" rel="noreferrer">Continue on WhatsApp</a>
-        ) : (
-          <button className="btn-primary mt-5 w-full opacity-60" type="button" disabled>Add dishes first</button>
-        )}
-        <p className="mt-3 text-xs leading-5 text-mist">The team will confirm availability, timing, and payment details.</p>
+          <a className="btn-secondary mt-3 w-full" href={orderText} target="_blank" rel="noreferrer">Also send on WhatsApp</a>
+        ) : null}
+        {status && <p className="mt-4 rounded-lg bg-pool/15 p-3 text-sm font-bold text-charcoal" role="status">{status}</p>}
+        {error && <p className="mt-4 rounded-lg bg-red-100 p-3 text-sm font-bold text-red-800" role="alert">{error}</p>}
       </aside>
     </div>
   );

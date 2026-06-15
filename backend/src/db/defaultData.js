@@ -256,9 +256,9 @@ export function createDefaultData() {
       { id: "gallery_lifestyle_1", category: "Lifestyle", title: "SPA treatment moment", image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=85", active: true, createdAt: timestamp, updatedAt: timestamp }
     ],
     testimonials: [
-      { id: "testimonial_1", name: "Preview Guest", role: "Corporate retreat planner", quote: "Exactly the kind of polished destination Migori has been waiting for. The promise feels serene, premium, and proudly Kenyan.", active: true, createdAt: timestamp, updatedAt: timestamp },
-      { id: "testimonial_2", name: "Preview Guest", role: "Nairobi hospitality buyer", quote: "The lounge and SPA concept feels warm without losing the high-end atmosphere. We are already planning a launch weekend.", active: true, createdAt: timestamp, updatedAt: timestamp },
-      { id: "testimonial_3", name: "Preview Guest", role: "Family traveler", quote: "The food direction, rooms, and pool story make this feel like a complete escape, not just a place to sleep.", active: true, createdAt: timestamp, updatedAt: timestamp }
+      { id: "testimonial_1", name: "Preview Guest", role: "Corporate retreat planner", rating: 5, quote: "Exactly the kind of polished destination Migori has been waiting for. The promise feels serene, premium, and proudly Kenyan.", active: true, createdAt: timestamp, updatedAt: timestamp },
+      { id: "testimonial_2", name: "Preview Guest", role: "Nairobi hospitality buyer", rating: 5, quote: "The lounge and SPA concept feels warm without losing the high-end atmosphere. We are already planning a launch weekend.", active: true, createdAt: timestamp, updatedAt: timestamp },
+      { id: "testimonial_3", name: "Preview Guest", role: "Family traveler", rating: 5, quote: "The food direction, rooms, and pool story make this feel like a complete escape, not just a place to sleep.", active: true, createdAt: timestamp, updatedAt: timestamp }
     ],
     blogPosts: [
       { id: "blog_opening", slug: "new-luxury-escape-arrives-in-migori", title: "A New Luxury Escape Arrives in Migori", excerpt: "What guests can expect from the grand opening of Moorland House & SPA.", content: "Moorland House & SPA opens with boutique accommodation, a polished lounge, SPA rituals, and poolside relaxation.", tag: "Opening Soon", featuredImage: images.hero, published: true, createdAt: timestamp, updatedAt: timestamp },
@@ -269,9 +269,11 @@ export function createDefaultData() {
     accommodationBookings: [],
     spaBookings: [],
     loungeReservations: [],
+    eventBookings: [],
     foodOrders: [],
     contacts: [],
     newsletterSubscribers: [],
+    reviews: [],
     payments: [],
     uploads: []
   };

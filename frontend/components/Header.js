@@ -12,7 +12,8 @@ export default function Header() {
   const bookingLinks = [
     { label: "Book Room", href: "/accommodations#booking" },
     { label: "Reserve Table", href: "/lounge#reservation" },
-    { label: "Book Spa", href: "/spa#booking" }
+    { label: "Book Spa", href: "/spa#booking" },
+    { label: "Events", href: "/lounge#events" }
   ];
 
   const getBookingInfo = (href) => {

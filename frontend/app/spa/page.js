@@ -48,7 +48,7 @@ export default async function SpaPage() {
       </section>
       <section id="booking" className="section-pad bg-cream">
         <div className="luxury-container">
-          <BookingPanel type="spa" />
+          <BookingPanel type="spa" services={spaServices} />
         </div>
       </section>
     </main>

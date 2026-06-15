@@ -40,7 +40,19 @@ export default async function LoungePage() {
           <BookingPanel type="lounge" />
         </div>
       </section>
-      <section className="section-pad bg-ivory">
+      <section id="events" className="section-pad bg-ivory">
+        <div className="luxury-container">
+          <SectionHeading
+            eyebrow="Events & Conferences"
+            title="Private dining, meetings, retreats, and celebrations with Moorland service."
+            text="Share your date, guest count, setup preference, and deposit option. The team will confirm availability and package details."
+          />
+          <div className="mt-8">
+            <BookingPanel type="event" />
+          </div>
+        </div>
+      </section>
+      <section className="section-pad bg-cream">
         <div className="luxury-container">
           <SectionHeading eyebrow="Ambiance" title="Lounge and cuisine moments." />
           <div className="mt-10 grid gap-5 md:grid-cols-3">

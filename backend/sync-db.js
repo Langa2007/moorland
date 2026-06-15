@@ -22,9 +22,11 @@ const tables = [
   "accommodation_bookings",
   "spa_bookings",
   "lounge_reservations",
+  "event_bookings",
   "food_orders",
   "contacts",
   "newsletter_subscribers",
+  "reviews",
   "payments",
   "uploads"
 ];

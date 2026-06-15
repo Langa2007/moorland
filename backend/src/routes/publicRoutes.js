@@ -6,18 +6,21 @@ import {
   accommodationBookingSchema,
   availabilityQuerySchema,
   contactSchema,
+  eventBookingSchema,
   foodOrderSchema,
   loungeReservationSchema,
   newsletterSchema,
   paymentInitSchema,
+  paymentVerifySchema,
+  reviewSchema,
   slugParamSchema,
   spaBookingSchema
 } from "../validators/schemas.js";
 import { buildAvailability, assertRoomAvailable, assertSpaAvailable } from "../services/availabilityService.js";
 import { createId, now } from "../utils/ids.js";
 import { hydrateOrderItems } from "../services/orderService.js";
-import { createPayment } from "../services/paymentService.js";
-import { sendAdminNotification } from "../services/emailService.js";
+import { createPayment, handleMpesaCallback, verifyMpesaPayment } from "../services/paymentService.js";
+import { sendAdminNotification, sendBookingReceived } from "../services/emailService.js";
 
 const router = express.Router();
 
@@ -81,6 +84,21 @@ router.get("/testimonials", asyncHandler(async (_req, res) => {
   res.json({ success: true, data: activeOnly(await db.get("testimonials")) });
 }));
 
+router.get("/booking-status", asyncHandler(async (req, res, next) => {
+  const referenceId = req.query.referenceId?.toString();
+  const email = req.query.email?.toString().toLowerCase();
+  if (!referenceId || !email) return next(notFound("Booking reference and email are required"));
+  const collections = ["accommodationBookings", "spaBookings", "loungeReservations", "eventBookings", "foodOrders"];
+  for (const collection of collections) {
+    const record = (await db.get(collection)).find((item) => item.id === referenceId && item.email === email);
+    if (record) {
+      const payments = (await db.get("payments")).filter((payment) => payment.referenceId === referenceId);
+      return res.json({ success: true, data: { collection, record, payments } });
+    }
+  }
+  return next(notFound("Booking not found"));
+}));
+
 router.get("/blog", asyncHandler(async (_req, res) => {
   res.json({ success: true, data: (await db.get("blogPosts")).filter((item) => item.published) });
 }));
@@ -124,8 +142,9 @@ router.post("/bookings/accommodation", validate(accommodationBookingSchema), asy
   await sendAdminNotification({
     subject: "New accommodation booking",
     title: "New accommodation booking",
-    lines: [`Guest: ${booking.name}`, `Room: ${booking.roomName}`, `Dates: ${booking.checkIn} to ${booking.checkOut}`]
+    lines: [`Guest: ${booking.name}`, `Room: ${booking.roomName}`, `Dates: ${booking.checkIn} to ${booking.checkOut}`, `Total: KSh ${booking.total}`]
   }).catch(() => null);
+  await sendBookingReceived({ booking, kind: "accommodation booking", payment }).catch(() => null);
 
   res.status(201).json({ success: true, data: { booking, payment } });
 }));
@@ -157,8 +176,9 @@ router.post("/bookings/spa", validate(spaBookingSchema), asyncHandler(async (req
   await sendAdminNotification({
     subject: "New SPA booking",
     title: "New SPA booking",
-    lines: [`Guest: ${booking.name}`, `Service: ${booking.serviceName}`, `Time: ${booking.date} ${booking.time}`]
+    lines: [`Guest: ${booking.name}`, `Service: ${booking.serviceName}`, `Time: ${booking.date} ${booking.time}`, `Total: KSh ${booking.total}`]
   }).catch(() => null);
+  await sendBookingReceived({ booking, kind: "Spa booking", payment }).catch(() => null);
 
   res.status(201).json({ success: true, data: { booking, payment } });
 }));
@@ -174,7 +194,36 @@ router.post("/reservations/lounge", validate(loungeReservationSchema), asyncHand
     title: "New lounge reservation",
     lines: [`Guest: ${reservation.name}`, `Guests: ${reservation.guests}`, `Time: ${reservation.date} ${reservation.time}`]
   }).catch(() => null);
+  await sendBookingReceived({ booking: reservation, kind: "lounge reservation", payment: null }).catch(() => null);
   res.status(201).json({ success: true, data: reservation });
+}));
+
+router.post("/bookings/events", validate(eventBookingSchema), asyncHandler(async (req, res) => {
+  const deposit = req.body.depositAmount || Math.max(1000, req.body.guests * 500);
+  const booking = await db.insert("eventBookings", {
+    id: createId("event"),
+    ...req.body,
+    total: deposit,
+    status: "pending"
+  });
+
+  const payment = req.body.paymentMethod === "cash"
+    ? null
+    : await createPayment({
+      referenceType: "event",
+      referenceId: booking.id,
+      method: req.body.paymentMethod,
+      amount: deposit,
+      phone: req.body.phone
+    });
+
+  await sendAdminNotification({
+    subject: "New event booking",
+    title: "New event and conference request",
+    lines: [`Guest: ${booking.name}`, `Event: ${booking.eventType}`, `Guests: ${booking.guests}`, `Time: ${booking.date} ${booking.time}`, `Deposit: KSh ${deposit}`]
+  }).catch(() => null);
+  await sendBookingReceived({ booking, kind: "event booking", payment }).catch(() => null);
+  res.status(201).json({ success: true, data: { booking, payment } });
 }));
 
 router.post("/orders/food", validate(foodOrderSchema), asyncHandler(async (req, res) => {
@@ -202,6 +251,7 @@ router.post("/orders/food", validate(foodOrderSchema), asyncHandler(async (req, 
     title: "New food order",
     lines: [`Guest: ${order.name}`, `Order type: ${order.orderType}`, `Total: KSh ${order.total}`]
   }).catch(() => null);
+  await sendBookingReceived({ booking: order, kind: "food order", payment }).catch(() => null);
 
   res.status(201).json({ success: true, data: { order, payment } });
 }));
@@ -233,9 +283,38 @@ router.post("/newsletter", validate(newsletterSchema), asyncHandler(async (req, 
   return res.status(201).json({ success: true, data: subscriber });
 }));
 
+router.post("/reviews", validate(reviewSchema), asyncHandler(async (req, res) => {
+  const review = await db.insert("reviews", {
+    id: createId("review"),
+    ...req.body,
+    status: "pending"
+  });
+  await sendAdminNotification({
+    subject: "New guest review",
+    title: "New guest review awaiting approval",
+    lines: [`Guest: ${review.name}`, `Rating: ${review.rating}/5`, review.quote]
+  }).catch(() => null);
+  res.status(201).json({ success: true, data: review });
+}));
+
 router.post("/payments/initiate", validate(paymentInitSchema), asyncHandler(async (req, res) => {
   const payment = await createPayment(req.body);
   res.status(201).json({ success: true, data: payment });
+}));
+
+router.post("/payments/mpesa/callback", asyncHandler(async (req, res) => {
+  await handleMpesaCallback(req.body);
+  res.json({ ResultCode: 0, ResultDesc: "Accepted" });
+}));
+
+router.post("/payments/callback/mpesa", asyncHandler(async (req, res) => {
+  await handleMpesaCallback(req.body);
+  res.json({ ResultCode: 0, ResultDesc: "Accepted" });
+}));
+
+router.post("/payments/:id/verify", validate(paymentVerifySchema, "params"), asyncHandler(async (req, res) => {
+  const payment = await verifyMpesaPayment(req.params.id);
+  res.json({ success: true, data: payment });
 }));
 
 export default router;

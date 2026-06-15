@@ -19,7 +19,7 @@ export const loginSchema = z.object({
 });
 
 export const availabilityQuerySchema = z.object({
-  type: z.enum(["room", "spa", "lounge"]).default("room"),
+  type: z.enum(["room", "spa", "lounge", "event"]).default("room"),
   resourceId: z.string().optional(),
   from: dateString,
   to: dateString.optional()
@@ -60,6 +60,22 @@ export const loungeReservationSchema = z.object({
   notes: z.string().max(1000).optional().default("")
 });
 
+export const eventBookingSchema = z.object({
+  date: dateString,
+  time: timeString,
+  guests: z.coerce.number().int().min(2).max(500),
+  eventType: z.string().min(2).max(120),
+  packageName: z.string().max(120).optional().default(""),
+  name: z.string().min(2),
+  organization: z.string().max(120).optional().default(""),
+  email,
+  phone,
+  setup: z.string().max(120).optional().default(""),
+  notes: z.string().max(1500).optional().default(""),
+  paymentMethod: z.enum(["mpesa", "card", "mobile-money", "cash"]).default("mpesa"),
+  depositAmount: z.coerce.number().min(0).optional().default(0)
+});
+
 export const foodOrderSchema = z.object({
   name: z.string().min(2),
   email,
@@ -85,21 +101,39 @@ export const contactSchema = z.object({
   message: z.string().min(5).max(2000)
 });
 
+export const inquiryReplySchema = z.object({
+  subject: z.string().min(2).max(160).optional().default("Response from Moorland House & Spa"),
+  message: z.string().min(5).max(3000)
+});
+
 export const newsletterSchema = z.object({
   email,
   name: z.string().max(100).optional().default("")
 });
 
 export const paymentInitSchema = z.object({
-  referenceType: z.enum(["accommodation", "spa", "food-order"]),
+  referenceType: z.enum(["accommodation", "spa", "food-order", "event"]),
   referenceId: z.string().min(2),
   method: z.enum(["mpesa", "card", "mobile-money"]),
   phone: phone.optional(),
   amount: z.coerce.number().min(1)
 });
 
+export const paymentVerifySchema = z.object({
+  id: z.string().min(2)
+});
+
+export const reviewSchema = z.object({
+  name: z.string().min(2),
+  role: z.string().max(120).optional().default("Guest"),
+  rating: z.coerce.number().int().min(1).max(5),
+  quote: z.string().min(10).max(1000),
+  stayDate: dateString.optional(),
+  source: z.enum(["website", "admin"]).default("website")
+});
+
 export const statusPatchSchema = z.object({
-  status: z.enum(["pending", "confirmed", "cancelled", "completed", "paid", "failed"])
+  status: z.enum(["new", "active", "pending", "confirmed", "cancelled", "completed", "paid", "failed"])
 });
 
 export const roomSchema = z.object({
@@ -150,6 +184,7 @@ export const testimonialSchema = z.object({
   name: z.string().min(2),
   role: z.string().min(2),
   quote: z.string().min(5),
+  rating: z.coerce.number().int().min(1).max(5).optional().default(5),
   active: z.boolean().default(true)
 });
 
@@ -164,7 +199,7 @@ export const blogPostSchema = z.object({
 });
 
 export const availabilityBlockSchema = z.object({
-  type: z.enum(["room", "spa", "lounge"]),
+  type: z.enum(["room", "spa", "lounge", "event"]),
   resourceId: z.string().optional().default(""),
   from: dateString,
   to: dateString,

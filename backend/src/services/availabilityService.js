@@ -68,7 +68,13 @@ export async function assertSpaAvailable(serviceId, date, time) {
 }
 
 export async function buildAvailability({ type, resourceId = "", from, to = from }) {
-  const blocked = await isBlocked({ type, resourceId, from, to });
+  let blocked = await isBlocked({ type, resourceId, from, to });
+  if (!blocked && type === "event") {
+    blocked = (await db.get("eventBookings")).some((booking) => (
+      booking.date === from &&
+      !["cancelled", "failed"].includes(booking.status)
+    ));
+  }
   return {
     type,
     resourceId,

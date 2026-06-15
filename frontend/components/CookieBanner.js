@@ -4,6 +4,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
+function getCookie(name) {
+  if (typeof document === "undefined") return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+  return null;
+}
+
+function setCookie(name, value, days = 365) {
+  if (typeof document === "undefined") return;
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  const secure = location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; expires=${expires}; SameSite=Lax${secure}`;
+}
+
 export default function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
@@ -11,24 +26,24 @@ export default function CookieBanner() {
   const [marketingConsent, setMarketingConsent] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem("moorland_cookie_consent");
+    const consent = getCookie("moorland_cookie_consent");
     if (!consent) {
       setIsVisible(true);
     }
   }, []);
 
   const handleAcceptAll = () => {
-    localStorage.setItem("moorland_cookie_consent", "all");
+    setCookie("moorland_cookie_consent", "all");
     setIsVisible(false);
   };
 
   const handleRejectAll = () => {
-    localStorage.setItem("moorland_cookie_consent", "essential");
+    setCookie("moorland_cookie_consent", "essential");
     setIsVisible(false);
   };
 
   const handleSaveCustom = () => {
-    localStorage.setItem(
+    setCookie(
       "moorland_cookie_consent",
       JSON.stringify({
         essential: true,

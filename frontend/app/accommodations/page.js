@@ -43,7 +43,7 @@ export default async function AccommodationsPage() {
       </section>
       <section id="booking" className="section-pad bg-ivory">
         <div className="luxury-container">
-          <BookingPanel type="stay" />
+          <BookingPanel type="stay" rooms={rooms} />
         </div>
       </section>
     </main>

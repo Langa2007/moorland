@@ -5,10 +5,12 @@ export const contact = {
   email: "reservations@moorlandhouse-spa.com",
   website: "Moorlandhouse-spa.com",
   location: "Migori Town, Nairobi, Kenya",
+  googleMaps: "https://maps.google.com/?q=Moorland+House+And+Spa+Migori",
   socials: [
     { label: "Instagram", handle: "@moorlandhouse_spa", href: "https://instagram.com/moorlandhouse_spa" },
     { label: "Facebook", handle: "Moorland House & Spa", href: "https://facebook.com/moorlandhousespa" },
-    { label: "TikTok", handle: "@moorlandhouse_spa", href: "https://tiktok.com/@moorlandhouse_spa" }
+    { label: "TikTok", handle: "@moorlandhouse_spa", href: "https://tiktok.com/@moorlandhouse_spa" },
+    { label: "X", handle: "@moorland_spa", href: "https://x.com/moorland_spa" }
   ]
 };
 

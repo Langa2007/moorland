@@ -1,4 +1,5 @@
 import BookingPanel from "@/components/BookingPanel";
+import RongoApartmentAd from "@/components/RongoApartmentAd";
 import SectionHeading from "@/components/SectionHeading";
 import { getSiteData } from "@/lib/data";
 
@@ -10,7 +11,7 @@ export const metadata = {
 };
 
 export default async function AccommodationsPage() {
-  const { rooms } = await getSiteData();
+  const { rooms, rongoApartment } = await getSiteData();
 
   return (
     <main className="pt-24">
@@ -41,6 +42,7 @@ export default async function AccommodationsPage() {
           </div>
         </div>
       </section>
+      <RongoApartmentAd advert={rongoApartment} />
       <section id="booking" className="section-pad bg-ivory">
         <div className="luxury-container">
           <BookingPanel type="stay" rooms={rooms} />

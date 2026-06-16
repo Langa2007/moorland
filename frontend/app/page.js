@@ -4,6 +4,7 @@ import Countdown from "@/components/Countdown";
 import GalleryGrid from "@/components/GalleryGrid";
 import Newsletter from "@/components/Newsletter";
 import ReviewForm from "@/components/ReviewForm";
+import RongoApartmentAd from "@/components/RongoApartmentAd";
 import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
 import { getSiteData } from "@/lib/data";
@@ -11,7 +12,7 @@ import { getSiteData } from "@/lib/data";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const { contact, experiences, images, menuItems, rooms, spaServices, gallery, testimonials } = await getSiteData();
+  const { contact, experiences, images, menuItems, rooms, spaServices, gallery, testimonials, rongoApartment } = await getSiteData();
 
   return (
     <main>
@@ -20,8 +21,8 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/50 to-charcoal/25" />
         <div className="luxury-container relative z-10 pb-12 pt-32">
           <div className="max-w-5xl">
-            <div className="mb-6 inline-flex rounded-full border border-pool/50 bg-charcoal/60 px-4 py-2 text-sm font-black text-pool backdrop-blur">
-              Coming Soon - Grand Opening 1st July 2026
+            <div className="mb-6 inline-flex max-w-full items-center rounded-full border border-pool/50 bg-charcoal/70 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-pool backdrop-blur sm:text-sm">
+              Coming Soon | Grand Opening 1 July 2026
             </div>
             <h1 className="heading-xl">Where Elegance Meets Serenity</h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-cream md:text-2xl">
@@ -34,7 +35,8 @@ export default async function HomePage() {
               <Link href="/accommodations#booking" className="btn-ghost">Book Stay</Link>
             </div>
           </div>
-          <div className="mt-10 max-w-2xl">
+          <div className="mt-10 max-w-xl rounded-lg border border-white/15 bg-charcoal/50 p-4 backdrop-blur">
+            <p className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-cream/70">Opening countdown</p>
             <Countdown />
           </div>
         </div>
@@ -75,6 +77,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <RongoApartmentAd advert={rongoApartment} />
 
       <section className="section-pad bg-ivory">
         <div className="luxury-container grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">

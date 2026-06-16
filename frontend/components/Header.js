@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { FaBars, FaChevronDown, FaWhatsapp, FaXmark } from "react-icons/fa6";
 import { contact, navItems } from "@/lib/data";
 
 export default function Header() {
@@ -32,6 +33,11 @@ export default function Header() {
         return {
           title: "Lounge Dining",
           desc: "African classics & signature cocktails."
+        };
+      case "/lounge#events":
+        return {
+          title: "Events & Conferences",
+          desc: "Private dining, meetings & celebrations."
         };
       default:
         return { title: "", desc: "" };
@@ -74,9 +80,7 @@ export default function Header() {
             rel="noreferrer" 
             className="flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-cream/80 transition hover:border-pool hover:bg-white/5 hover:text-pool"
           >
-            <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.588 2.01 14.124 1.01 11.56 1.01c-5.439 0-9.863 4.372-9.867 9.802-.001 1.73.461 3.417 1.337 4.937l-1.013 3.693 3.784-.979c1.502.81 3.18 1.238 4.846 1.238zm11.517-7.79c-.31-.155-1.84-.907-2.126-1.01-.286-.104-.495-.155-.703.155-.208.311-.806.907-.988 1.114-.182.208-.364.233-.674.078-2.106-1.055-3.484-1.823-4.88-4.22-.365-.628.365-.583 1.042-1.936.115-.233.057-.44-.028-.596-.086-.156-.703-1.696-.963-2.32-.253-.61-.51-.527-.703-.537-.182-.01-.39-.012-.597-.012-.208 0-.546.078-.832.39-.286.311-1.092 1.066-1.092 2.6 0 1.533 1.118 3.012 1.274 3.22.156.208 2.2 3.359 5.33 4.716.744.323 1.325.515 1.777.659.749.237 1.43.204 1.969.124.6-.09 1.84-.753 2.1-1.448.259-.696.259-1.293.182-1.417-.078-.124-.286-.208-.596-.363z" />
-            </svg>
+            <FaWhatsapp className="h-3.5 w-3.5" />
             <span>WhatsApp</span>
           </a>
 
@@ -91,9 +95,7 @@ export default function Header() {
               onClick={() => setBookingOpen(!bookingOpen)}
             >
               <span>Reservations</span>
-              <svg className={`h-4 w-4 transition-transform duration-300 ${bookingOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+              <FaChevronDown className={`h-3.5 w-3.5 transition-transform duration-300 ${bookingOpen ? "rotate-180" : ""}`} />
             </button>
             
             <AnimatePresence>
@@ -138,13 +140,7 @@ export default function Header() {
           aria-label="Toggle navigation menu"
           aria-expanded={open}
         >
-          <svg className="h-5 w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
-            {open ? (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
+          {open ? <FaXmark className="h-5 w-5" /> : <FaBars className="h-5 w-5" />}
         </button>
       </div>
 

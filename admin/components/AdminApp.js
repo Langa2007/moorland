@@ -188,6 +188,32 @@ function toFormValue(type, value) {
   return value ?? "";
 }
 
+function socialsToText(items = []) {
+  return items.map((item) => `${item.label || ""}|${item.handle || ""}|${item.href || ""}`).join("\n");
+}
+
+function textToSocials(value = "") {
+  return value
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [label = "", handle = "", href = ""] = line.split("|").map((part) => part.trim());
+      return { label, handle, href };
+    })
+    .filter((item) => item.label && item.handle && item.href);
+}
+
+const defaultRongoApartment = {
+  active: true,
+  eyebrow: "Partner Property",
+  title: "Rongo Apartment",
+  description: "",
+  ctaLabel: "Request Details",
+  ctaHref: "/contact",
+  images: []
+};
+
 export default function AdminApp() {
   const [user, setUser] = useState(null);
   const [sessionChecked, setSessionChecked] = useState(false);
@@ -498,6 +524,42 @@ function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
     setSaveStatus(`${toTitle(key)} updated on the public site.`);
   }
 
+  async function saveRongo(nextRongo, message = "Rongo Apartment advert updated.") {
+    const nextDraft = {
+      ...draft,
+      rongoApartment: {
+        ...defaultRongoApartment,
+        ...(draft.rongoApartment || {}),
+        ...nextRongo
+      }
+    };
+    setDraft(nextDraft);
+    setSaveStatus("Saving Rongo Apartment advert...");
+    await onSave(nextDraft);
+    setSaveStatus(message);
+  }
+
+  function updateRongo(key, value) {
+    setDraft((current) => ({
+      ...current,
+      rongoApartment: {
+        ...defaultRongoApartment,
+        ...(current.rongoApartment || {}),
+        [key]: value
+      }
+    }));
+  }
+
+  async function appendRongoImage(url) {
+    const current = { ...defaultRongoApartment, ...(draft.rongoApartment || {}) };
+    await saveRongo({ images: [...(current.images || []), url] }, "Rongo Apartment image added.");
+  }
+
+  async function removeRongoImage(index) {
+    const current = { ...defaultRongoApartment, ...(draft.rongoApartment || {}) };
+    await saveRongo({ images: (current.images || []).filter((_, itemIndex) => itemIndex !== index) }, "Rongo Apartment image removed.");
+  }
+
   return (
     <form
       className="grid gap-5"
@@ -529,11 +591,63 @@ function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
       <MediaLibrary
         uploads={uploads}
         onUse={(slot, url) => saveSlot(slot, url)}
+        onUseRongo={appendRongoImage}
         onDelete={async (id) => {
           await api.remove(`/admin/uploads/${id}`);
           await onRefresh?.();
         }}
       />
+
+      <section className="rounded-lg bg-ivory p-5 shadow-soft">
+        <h3 className="font-serif text-2xl font-bold">Rongo Apartment advert</h3>
+        <p className="mt-2 text-sm leading-6 text-mist">
+          This advert block appears on the public site and is ready for the client's apartment images and details.
+        </p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <label className="flex items-center gap-3 rounded-lg border border-line bg-cream/60 p-3 text-sm font-bold text-mist">
+            <input
+              type="checkbox"
+              checked={(draft.rongoApartment || defaultRongoApartment).active !== false}
+              onChange={(event) => updateRongo("active", event.target.checked)}
+            />
+            Show Rongo Apartment advert
+          </label>
+          {["eyebrow", "title", "ctaLabel", "ctaHref"].map((key) => (
+            <label key={key} className="grid gap-2 text-sm font-bold text-mist">
+              {toTitle(key)}
+              <input className="field" value={(draft.rongoApartment || defaultRongoApartment)[key] || ""} onChange={(event) => updateRongo(key, event.target.value)} />
+            </label>
+          ))}
+          <label className="grid gap-2 text-sm font-bold text-mist md:col-span-2">
+            Description
+            <textarea className="field min-h-28" value={(draft.rongoApartment || defaultRongoApartment).description || ""} onChange={(event) => updateRongo("description", event.target.value)} />
+          </label>
+        </div>
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          {((draft.rongoApartment || defaultRongoApartment).images || []).map((image, index) => (
+            <article key={`${image}-${index}`} className="rounded-lg border border-line bg-cream/60 p-3">
+              <img src={image} alt="" className="h-36 w-full rounded-lg object-cover" />
+              <button className="btn btn-danger mt-3 w-full" type="button" onClick={() => removeRongoImage(index)}>
+                <Trash2 className="h-4 w-4" />
+                Remove
+              </button>
+            </article>
+          ))}
+        </div>
+        <div className="mt-5">
+          <ImageField
+            label="Add Rongo Apartment image"
+            value=""
+            onChange={appendRongoImage}
+            api={api}
+            hint="Upload an apartment image to append it to the advert gallery."
+          />
+        </div>
+        <button className="btn btn-primary mt-5 w-fit" type="button" onClick={() => saveRongo(draft.rongoApartment || defaultRongoApartment)}>
+          <Save className="h-4 w-4" />
+          Save Rongo advert
+        </button>
+      </section>
 
       <section className="rounded-lg bg-ivory p-5 shadow-soft">
         <h3 className="font-serif text-2xl font-bold">Contact and SEO</h3>
@@ -544,6 +658,11 @@ function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
               <input className="field" value={draft[key] || ""} onChange={(event) => update(key, event.target.value)} />
             </label>
           ))}
+          <label className="grid gap-2 text-sm font-bold text-mist md:col-span-2">
+            Social links
+            <textarea className="field min-h-32" value={socialsToText(draft.socials || [])} onChange={(event) => update("socials", textToSocials(event.target.value))} />
+            <span className="text-xs font-medium text-mist/70">One per line: Platform|Handle|URL. Include Facebook, Instagram, TikTok, X, YouTube, LinkedIn.</span>
+          </label>
           <label className="grid gap-2 text-sm font-bold text-mist md:col-span-2">
             SEO keywords
             <textarea className="field min-h-28" value={(draft.seoKeywords || []).join("\n")} onChange={(event) => update("seoKeywords", fromFormValue("list", event.target.value))} />
@@ -559,7 +678,7 @@ function MetaEditor({ meta, api, uploads = [], onSave, onRefresh }) {
   );
 }
 
-function MediaLibrary({ uploads, onUse, onDelete }) {
+function MediaLibrary({ uploads, onUse, onUseRongo, onDelete }) {
   const [copied, setCopied] = useState("");
 
   return (
@@ -581,6 +700,9 @@ function MediaLibrary({ uploads, onUse, onDelete }) {
                   {label}
                 </button>
               ))}
+              <button className="btn btn-ghost min-h-10 px-2 text-xs" type="button" onClick={() => onUseRongo?.(upload.url)}>
+                Rongo advert
+              </button>
             </div>
             <div className="mt-3 flex gap-2">
               <button

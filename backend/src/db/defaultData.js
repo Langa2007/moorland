@@ -22,7 +22,7 @@ export function createDefaultData() {
       brandName: "Moorland House & SPA",
       tagline: "Where Elegance Meets Serenity",
       openingDate: "2026-07-01T00:00:00+03:00",
-      location: "Migori Town, Nairobi, Kenya",
+      location: "Migori Kenya",
       phone: "+254 727 623260",
       email: "reservations@moorlandhouse-spa.com",
       website: "Moorlandhouse-spa.com",
@@ -38,8 +38,20 @@ export function createDefaultData() {
       socials: [
         { label: "Instagram", handle: "@moorlandhouse_spa", href: "https://instagram.com/moorlandhouse_spa" },
         { label: "Facebook", handle: "Moorland House & SPA", href: "https://facebook.com/moorlandhousespa" },
-        { label: "TikTok", handle: "@moorlandhouse_spa", href: "https://tiktok.com/@moorlandhouse_spa" }
+        { label: "TikTok", handle: "@moorlandhouse_spa", href: "https://tiktok.com/@moorlandhouse_spa" },
+        { label: "X", handle: "@moorland_spa", href: "https://x.com/moorland_spa" },
+        { label: "YouTube", handle: "@moorlandhouse_spa", href: "https://youtube.com/@moorlandhouse_spa" },
+        { label: "LinkedIn", handle: "Moorland House & SPA", href: "https://linkedin.com/company/moorland-house-spa" }
       ],
+      rongoApartment: {
+        active: true,
+        eyebrow: "Partner Property",
+        title: "Rongo Apartment",
+        description: "A dedicated advertisement space for the upcoming Rongo Apartment property. Images, rates, features, and booking details can be added as soon as the client provides them.",
+        ctaLabel: "Request Details",
+        ctaHref: "/contact",
+        images: []
+      },
       seoKeywords: [
         "Migori luxury hotel",
         "Kenya spa",

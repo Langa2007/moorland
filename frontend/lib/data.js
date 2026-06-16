@@ -4,14 +4,26 @@ export const contact = {
   whatsapp: "https://wa.me/254727623260",
   email: "reservations@moorlandhouse-spa.com",
   website: "Moorlandhouse-spa.com",
-  location: "Migori Town, Nairobi, Kenya",
+  location: "Migori Kenya",
   googleMaps: "https://maps.google.com/?q=Moorland+House+And+Spa+Migori",
   socials: [
     { label: "Instagram", handle: "@moorlandhouse_spa", href: "https://instagram.com/moorlandhouse_spa" },
     { label: "Facebook", handle: "Moorland House & Spa", href: "https://facebook.com/moorlandhousespa" },
     { label: "TikTok", handle: "@moorlandhouse_spa", href: "https://tiktok.com/@moorlandhouse_spa" },
-    { label: "X", handle: "@moorland_spa", href: "https://x.com/moorland_spa" }
+    { label: "X", handle: "@moorland_spa", href: "https://x.com/moorland_spa" },
+    { label: "YouTube", handle: "@moorlandhouse_spa", href: "https://youtube.com/@moorlandhouse_spa" },
+    { label: "LinkedIn", handle: "Moorland House & Spa", href: "https://linkedin.com/company/moorland-house-spa" }
   ]
+};
+
+export const rongoApartment = {
+  active: true,
+  eyebrow: "Partner Property",
+  title: "Rongo Apartment",
+  description: "A dedicated advertisement space for the upcoming Rongo Apartment property. Images, rates, features, and booking details can be added as soon as the client provides them.",
+  ctaLabel: "Request Details",
+  ctaHref: "/contact",
+  images: []
 };
 
 export const navItems = [
@@ -234,6 +246,12 @@ function money(value) {
 export function normalizeSiteData(site = {}) {
   const meta = site.meta || contact;
   const slots = meta.imageSlots || {};
+  const cleanLocation = (meta.location || contact.location).replace(/Migori Town,\s*Nairobi,\s*Kenya/i, "Migori Kenya");
+  const normalizedRongo = {
+    ...rongoApartment,
+    ...(meta.rongoApartment || {}),
+    images: (meta.rongoApartment?.images || []).map((image) => imageUrl(image)).filter(Boolean)
+  };
   const slotImage = (key) => (
     Object.prototype.hasOwnProperty.call(slots, key)
       ? imageUrl(slots[key])
@@ -281,8 +299,11 @@ export function normalizeSiteData(site = {}) {
     contact: {
       ...contact,
       ...meta,
+      location: cleanLocation,
+      socials: meta.socials?.length ? meta.socials : contact.socials,
       phoneLink: `tel:${(meta.phone || contact.phone).replace(/\s/g, "")}`
     },
+    rongoApartment: normalizedRongo,
     images: siteImages,
     experiences: [
       {

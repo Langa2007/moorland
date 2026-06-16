@@ -228,5 +228,14 @@ export const metaSchema = z.object({
     handle: z.string().min(2),
     href: z.string().url()
   })).default([]),
+  rongoApartment: z.object({
+    active: z.boolean().default(true),
+    eyebrow: z.string().max(80).optional().default("Partner Property"),
+    title: z.string().max(120).optional().default("Rongo Apartment"),
+    description: z.string().max(1200).optional().default(""),
+    ctaLabel: z.string().max(80).optional().default("Request Details"),
+    ctaHref: z.string().min(1).optional().default("/contact"),
+    images: z.array(z.string().url()).default([])
+  }).optional().default({}),
   seoKeywords: z.array(z.string()).default([])
 });

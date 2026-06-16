@@ -58,6 +58,112 @@ a {
   min-height: clamp(680px, 100dvh, 960px);
 }
 
+.coming-soon-badge {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.7rem;
+  overflow: hidden;
+  border: 1px solid rgba(69, 184, 172, 0.45);
+  border-radius: 999px;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 42%, rgba(69, 184, 172, 0.16)),
+    rgba(24, 32, 39, 0.72);
+  padding: 0.58rem 1rem;
+  box-shadow: 0 0 26px rgba(69, 184, 172, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(14px);
+}
+
+.coming-soon-badge::before {
+  content: "";
+  position: absolute;
+  inset: -40% auto -40% -25%;
+  width: 28%;
+  transform: rotate(18deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.38), transparent);
+  animation: moorland-sheen 4.2s ease-in-out infinite;
+}
+
+.coming-soon-badge::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  pointer-events: none;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.coming-soon-text {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.05rem, 2.5vw, 1.55rem);
+  font-weight: 800;
+  line-height: 1;
+  color: #f8f1df;
+  text-shadow: 0 0 18px rgba(69, 184, 172, 0.28);
+}
+
+.coming-soon-date {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  font-size: clamp(0.62rem, 1.8vw, 0.78rem);
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgb(69 184 172);
+}
+
+.coming-soon-divider {
+  position: relative;
+  z-index: 1;
+  height: 1px;
+  width: clamp(1.3rem, 5vw, 3rem);
+  transform-origin: left;
+  background: linear-gradient(90deg, rgba(69, 184, 172, 0.15), rgba(69, 184, 172, 0.9), rgba(248, 241, 223, 0.35));
+}
+
+.coming-soon-caret {
+  display: inline-block;
+  margin-left: 0.16rem;
+  height: 1.05em;
+  width: 1px;
+  transform: translateY(0.13em);
+  background: rgb(69 184 172);
+  box-shadow: 0 0 14px rgba(69, 184, 172, 0.8);
+}
+
+@keyframes moorland-sheen {
+  0%, 52% {
+    transform: translateX(0) rotate(18deg);
+    opacity: 0;
+  }
+  62% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(520%) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .coming-soon-badge {
+    align-items: flex-start;
+    border-radius: 18px;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.8rem 0.95rem;
+  }
+
+  .coming-soon-divider {
+    width: 100%;
+  }
+}
+
 .section-pad {
   padding-block: clamp(64px, 7vw, 104px);
   scroll-margin-top: 96px;

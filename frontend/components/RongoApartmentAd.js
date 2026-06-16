@@ -34,7 +34,7 @@ export default function RongoApartmentAd({ advert }) {
             </div>
           ) : (
             <div className="rounded-lg border border-white/15 bg-white/10 p-4 text-sm leading-6 text-cream/80">
-              Client images and apartment details can be added from the admin dashboard when ready.
+              cooming soon.
             </div>
           )}
         </div>

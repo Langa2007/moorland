@@ -99,7 +99,15 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-white/10 py-5 text-center text-xs text-cream/60">
-          Copyright 2026 Moorland House & Spa. All rights reserved.
+          © 2026 Moorland House & Spa. All rights reserved.
+        </div>
+        <div className="border-t border-white/10 bg-black/15 py-4 text-center text-xs leading-6 text-cream/55">
+          <p>
+            Designed and developed by <span className="font-bold text-cream/80">Ochieng&apos;s Software Solutions</span>, Nairobi.
+          </p>
+          <a href="mailto:Ochiengsoftwaresolutions@gmail.com" className="hover:text-pool">
+            Ochiengsoftwaresolutions@gmail.com
+          </a>
         </div>
       </footer>
       <CookieBanner />

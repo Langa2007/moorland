@@ -78,7 +78,7 @@ export default function Footer() {
           </div>
 
           <div className="rounded-lg border border-white/10 bg-white/5 p-5">
-            <p className="font-bold uppercase tracking-[0.14em] text-pool">Migori Location</p>
+            <p className="font-bold uppercase tracking-[0.14em] text-pool">Location</p>
             <div className="mt-4 grid gap-4 text-sm leading-6 text-cream/85">
               <p className="flex gap-3">
                 <MdLocationPin className="mt-1 h-5 w-5 shrink-0 text-pool" />

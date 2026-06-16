@@ -42,7 +42,7 @@ export default function AnimatedComingSoon() {
           className="coming-soon-caret"
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 0.2, 1, 0] }}
-          transition={{ delay: letters.length * 0.09, duration: 1.4, repeat: Infinity, repeatDelay: 0.7 }}
+          transition={{ delay: letters.length * 0.09, duration: 1.4 }}
         />
       </span>
       <motion.span

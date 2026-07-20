@@ -1,7 +1,7 @@
 import Link from "next/link";
-import AnimatedComingSoon from "@/components/AnimatedComingSoon";
+import AnimatedNowOpen from "@/components/AnimatedNowOpen";
 import BookingPanel from "@/components/BookingPanel";
-import Countdown from "@/components/Countdown";
+import LiveStatusTicker from "@/components/LiveStatusTicker";
 import GalleryGrid from "@/components/GalleryGrid";
 import Newsletter from "@/components/Newsletter";
 import ReviewForm from "@/components/ReviewForm";
@@ -23,7 +23,7 @@ export default async function HomePage() {
         <div className="luxury-container relative z-10 pb-12 pt-32">
           <div className="max-w-5xl">
             <div className="mb-6">
-              <AnimatedComingSoon />
+              <AnimatedNowOpen />
             </div>
             <h1 className="heading-xl">Where Elegance Meets Serenity</h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-cream md:text-2xl">
@@ -37,8 +37,8 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="mt-10 max-w-xl rounded-lg border border-white/15 bg-charcoal/50 p-4 backdrop-blur">
-            <p className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-cream/70">Opening countdown</p>
-            <Countdown />
+            <p className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-cream/70">What&apos;s on today</p>
+            <LiveStatusTicker />
           </div>
         </div>
       </section>
@@ -171,7 +171,7 @@ export default async function HomePage() {
 
       <section className="section-pad bg-cream">
         <div className="luxury-container">
-          <SectionHeading eyebrow="Guest Trust" title="Opening soon with a clear sense of the experience." align="center" />
+          <SectionHeading eyebrow="Guest Trust" title="What our guests are saying." align="center" />
           <div className="mt-10">
             <Testimonials items={testimonials} />
           </div>

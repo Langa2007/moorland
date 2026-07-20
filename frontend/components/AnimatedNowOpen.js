@@ -13,9 +13,9 @@ export default function AnimatedNowOpen() {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Pulsing live dot */}
-      <span className="now-open-dot" aria-hidden="true">
-        <span className="now-open-dot-ring" />
+      {/* Luxury diamond ornament */}
+      <span className="now-open-diamond" aria-hidden="true">
+        <span className="now-open-diamond-inner" />
       </span>
 
       <motion.span

@@ -58,6 +58,40 @@ a {
   min-height: clamp(680px, 100dvh, 960px);
 }
 
+/* ── Parallax & Scroll Performance ──────────────────────────── */
+
+/* Smooth, momentum-like scrolling on iOS and modern browsers */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure parallax layers use GPU compositing */
+.will-change-transform {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ParallaxSection — ensure overflow is clipped */
+.parallax-frame {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Section entrance — base state for JS-controlled reveals */
+.reveal-ready {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.reveal-ready.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* ── Now Open Badge ─────────────────────────────────────── */
 .now-open-badge {
   position: relative;

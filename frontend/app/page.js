@@ -20,7 +20,6 @@ export default async function HomePage() {
 
   return (
     <main>
-      {/* ── Hero with parallax ────────────────────────────────── */}
       <ParallaxHero
         src={images.hero}
         alt="Luxury pool and hospitality setting at golden hour"
@@ -58,7 +57,6 @@ export default async function HomePage() {
         </div>
       </ParallaxHero>
 
-      {/* ── Quick links ───────────────────────────────────────── */}
       <section className="bg-charcoal py-5 text-ivory">
         <MotionReveal stagger staggerDelay={0.08} delay={0.05} className="luxury-container grid gap-3 md:grid-cols-3">
           {[
@@ -76,7 +74,6 @@ export default async function HomePage() {
         </MotionReveal>
       </section>
 
-      {/* ── Experiences ───────────────────────────────────────── */}
       <section className="section-pad bg-cream">
         <div className="luxury-container">
           <SectionHeading
@@ -100,10 +97,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Rongo apartment ad ────────────────────────────────── */}
       <RongoApartmentAd advert={rongoApartment} />
 
-      {/* ── Parallax divider — lounge teaser ─────────────────── */}
       <ParallaxSection src={images.hero} minHeight="340px" speed={0.4} className="my-0">
         <div className="luxury-container py-16 text-center text-ivory">
           <MotionReveal variant="scale" duration={0.7}>
@@ -114,7 +109,6 @@ export default async function HomePage() {
         </div>
       </ParallaxSection>
 
-      {/* ── Lounge section ────────────────────────────────────── */}
       <section className="section-pad bg-ivory">
         <div className="luxury-container grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <MotionReveal variant="fadeLeft" duration={0.7}>
@@ -141,7 +135,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Spa section ───────────────────────────────────────── */}
       <section className="section-pad bg-charcoal text-ivory">
         <div className="luxury-container grid gap-8 lg:grid-cols-2">
           <MotionReveal variant="fadeLeft" duration={0.75}>
@@ -171,13 +164,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Accommodations ────────────────────────────────────── */}
       <section className="section-pad bg-cream">
         <div className="luxury-container">
           <SectionHeading
             eyebrow="Luxury Accommodations"
-            title="Three suite tiers, presented in the requested order."
-            text="Presidential Suite, Executive Suite, and Superior Suite each offer warm finishes, calm privacy, and attentive service."
+            title="Three suite tiers, presented in the requisite manner."
+            text="Imperial Suite, Executive Suite, and Superior Suite each offer warm finishes, calm privacy, and attentive service."
           />
           <MotionReveal stagger staggerDelay={0.14} delay={0.1} className="mt-10 grid gap-5 lg:grid-cols-3">
             {rooms.map((room) => (
@@ -199,7 +191,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Pool & Grounds ────────────────────────────────────── */}
       <section className="section-pad bg-ivory">
         <div className="luxury-container grid gap-10 lg:grid-cols-2 lg:items-center">
           <MotionReveal variant="fadeLeft" duration={0.75}>
@@ -216,7 +207,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Parallax divider — pool image ─────────────────────── */}
       <ParallaxSection src={images.pool} minHeight="300px" speed={0.3} className="my-0">
         <div className="luxury-container py-14 text-center text-ivory">
           <MotionReveal variant="fade" duration={0.8}>
@@ -226,7 +216,6 @@ export default async function HomePage() {
         </div>
       </ParallaxSection>
 
-      {/* ── Testimonials ──────────────────────────────────────── */}
       <section className="section-pad bg-cream">
         <div className="luxury-container">
           <SectionHeading eyebrow="Guest Trust" title="What our guests are saying." align="center" />
@@ -239,7 +228,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Gallery ───────────────────────────────────────────── */}
       <section className="section-pad bg-ivory">
         <div className="luxury-container">
           <SectionHeading eyebrow="Gallery Teaser" title="A cinematic look at Moorland's spaces and experiences." />
@@ -249,7 +237,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Contact & Newsletter ──────────────────────────────── */}
       <section className="section-pad bg-cream">
         <div className="luxury-container grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <MotionReveal variant="fadeLeft" duration={0.7}>

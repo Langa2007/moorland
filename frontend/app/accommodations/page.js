@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Luxury Accommodations",
-  description: "Presidential Suite, Executive Suite, and Superior Suite accommodation at Moorland House & Spa."
+  description: "Imperial Suite, Executive Suite, and Superior Suite accommodation at Moorland House & Spa."
 };
 
 export default async function AccommodationsPage() {

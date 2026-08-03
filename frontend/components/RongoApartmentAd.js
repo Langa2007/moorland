@@ -34,7 +34,7 @@ export default function RongoApartmentAd({ advert }) {
             </div>
           ) : (
             <div className="italic p-4 text-sm leading-6 text-cream/80">
-              Affordabe BNBs at Rongo.
+              Rongo Furnished Apartment
             </div>
           )}
         </div>
